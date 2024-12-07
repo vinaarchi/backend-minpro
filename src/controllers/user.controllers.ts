@@ -5,6 +5,7 @@ import { hashPassword } from "../utils/hashPassword";
 import { sign } from "jsonwebtoken";
 import { sendEmail } from "../utils/emailSender";
 import { compareSync } from "bcrypt";
+import { generateReferralCode } from "../utils/generateReferralCode";
 
 export class UserController {
   async register(
@@ -29,11 +30,44 @@ export class UserController {
 
       const newPassword = await hashPassword(req.body.password);
 
+      //validasi referral code (jika ada)
+      let referredById = null;
+      if (req.body.referredByCode) {
+        const referredByUser = await prisma.user.findUnique({
+          where: { referralCode: req.body.referredByCode },
+        });
+
+        if (referredByUser) {
+          referredById = referredByUser.id;
+
+          //nambahin poin ke user yang ngasih code
+          await prisma.user.update({
+            where: { id: referredById },
+            data: {
+              pointsBalance: {
+                increment: 10000,
+              },
+            },
+          });
+        } else {
+          return ResponseHandler.error(
+            res,
+            "Invalid referral code. Please check and try again.",
+            400
+          );
+        }
+      }
+
+      //Generate referral code untuk pengguna baru
+      const referralCode = generateReferralCode();
+
       // buat pengguna baru
       const user = await prisma.user.create({
         data: {
           ...req.body,
           password: newPassword,
+          referredById: referredById,
+          referralCode: referralCode,
         },
       });
 
@@ -43,7 +77,10 @@ export class UserController {
         { expiresIn: "1h" }
       );
 
-      return ResponseHandler.success(res, "Your signup is success", 201);
+      return ResponseHandler.success(res, "Your signup is success", 201, {
+        token,
+        user,
+      });
     } catch (error: any) {
       console.log(error);
       return ResponseHandler.error(
