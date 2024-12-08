@@ -23,7 +23,7 @@ model User {
   imgProfile String?
   isVerified Boolean  @default(false)
   role       Role     @default(CUSTOMER)
-  referralCode String @unique
+  referralCode String? @unique
   pointsBalance Int @default(0)
   pointsExpiration DateTime?
   discountCoupon String?
