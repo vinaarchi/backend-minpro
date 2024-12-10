@@ -4,6 +4,10 @@ import express, { Request, Response, NextFunction, Application } from "express";
 import cors from "cors";
 import responseHandler from "./utils/ResponseHandler";
 import { UserRouter } from "./routers/userRouter";
+import { EventRouter } from "./routers/eventRouter";
+import { ReviewRouter } from "./routers/reviewRouter";
+import { TicketRouter } from "./routers/ticketRouter";
+import { PromotionRouter } from "./routers/promotionRouter";
 
 const PORT = process.env.PORT || 8080;
 
@@ -24,10 +28,18 @@ class App {
 
   private routes(): void {
     const userRouter = new UserRouter();
+    const eventRouter = new EventRouter();
+    const reviewRouter = new ReviewRouter();
+    const ticketRouter = new TicketRouter();
+    const promotionRouter = new PromotionRouter();
     this.app.get("/", (req: Request, res: Response): any => {
       return res.status(200).send("<h1>EVENT APPLICATION</h1>");
     });
     this.app.use("/user", userRouter.getRouter());
+    this.app.use("/events", eventRouter.getRouter());
+    this.app.use("/reviews", reviewRouter.getRouter());
+    this.app.use("/tickets", ticketRouter.getRouter());
+    this.app.use("/promotions", promotionRouter.getRouter());
   }
 
   private errorHandler(): void {

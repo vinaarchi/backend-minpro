@@ -6,6 +6,8 @@ import { sign } from "jsonwebtoken";
 import { sendEmail } from "../utils/emailSender";
 import { compareSync } from "bcrypt";
 import { generateReferralCode } from "../utils/generateReferralCode";
+import { addReferralPoints } from "../services/point.service";
+import { createDiscountCoupon } from "../services/discount.service";
 
 export class UserController {
   async register(
@@ -30,44 +32,35 @@ export class UserController {
 
       const newPassword = await hashPassword(req.body.password);
 
-      //validasi referral code (jika ada)
-      let referredById = null;
-      if (req.body.referredByCode) {
-        const referredByUser = await prisma.user.findUnique({
-          where: { referralCode: req.body.referredByCode },
-        });
-
-        if (referredByUser) {
-          referredById = referredByUser.id;
-
-          //nambahin poin ke user yang ngasih code
-          await prisma.user.update({
-            where: { id: referredById },
-            data: {
-              pointsBalance: {
-                increment: 10000,
-              },
-            },
-          });
-        } else {
-          return ResponseHandler.error(
-            res,
-            "Invalid referral code. Please check and try again.",
-            400
-          );
-        }
-      }
-
       //Generate referral code untuk pengguna baru
       const referralCode = generateReferralCode();
+
+      // cek apakah ada referral code yang digunakan
+      let referredById: number | null = null;
+      if (req.body.referralCode) {
+        const referralUser = await prisma.user.findUnique({
+          where: { referralCode: req.body.referralCode },
+        });
+
+        //klo kode referralnya valid, set jadi referredById
+        if (referralUser) {
+          referredById = referralUser.id;
+
+          // nambahin point ke user yang punya referal (10.000 poin)
+          await addReferralPoints(referralUser.id);
+
+          // bikin kupon diskon untuk pengguna baru yang baru daftar pake referral
+          await createDiscountCoupon(referralUser.id);
+        }
+      }
 
       // buat pengguna baru
       const user = await prisma.user.create({
         data: {
           ...req.body,
           password: newPassword,
-          referredById: referredById,
           referralCode: referralCode,
+          referredById: referredById,
         },
       });
 
@@ -129,6 +122,42 @@ export class UserController {
         error.rc || 500,
         error
       );
+    }
+  }
+
+  async keepLogin(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
+    try {
+      // data dari middleware
+      console.log("at keepLogin controller", res.locals.decript);
+      const findUser = await prisma.user.findUnique({
+        where: { id: res.locals.decript.id },
+      });
+
+      if (!findUser) {
+        throw { rc: 404, message: "Account is not exist" };
+      }
+
+      const token = sign(
+        { id: findUser.id, email: findUser.email },
+        process.env.TOKEN_KEY || "test"
+      );
+      return res.status(200).send({
+        fullname: findUser.fullname,
+        username: findUser.username,
+        email: findUser.email,
+        token,
+      });
+    } catch (error: any) {
+      console.log(error);
+      return res.status(error.rc || 500).send({
+        message: "Your keepLogin is failed",
+        success: false,
+        error: error.message,
+      });
     }
   }
 }
