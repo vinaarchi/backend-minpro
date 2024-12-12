@@ -6,7 +6,7 @@ export const createDiscountCoupon = async (userId: number): Promise<void> => {
   expirationDate.setMonth(expirationDate.getMonth() + 3);
 
   const discountCode = generateReferralCode();
-  
+
   await prisma.discountCoupon.create({
     data: {
       code: discountCode,

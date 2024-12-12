@@ -7,7 +7,7 @@ import { sendEmail } from "../utils/emailSender";
 import { compareSync } from "bcrypt";
 import { generateReferralCode } from "../utils/generateReferralCode";
 import { addReferralPoints } from "../services/point.service";
-import { createDiscountCoupon } from "../services/discount.service";
+// import { createDiscountCoupon } from "../services/discount.service";
 
 export class UserController {
   async register(
@@ -49,8 +49,8 @@ export class UserController {
           // nambahin point ke user yang punya referal (10.000 poin)
           await addReferralPoints(referralUser.id);
 
-          // bikin kupon diskon untuk pengguna baru yang baru daftar pake referral
-          await createDiscountCoupon(referralUser.id);
+          // // bikin kupon diskon untuk pengguna baru yang baru daftar pake referral
+          // await createDiscountCoupon(referralUser.id);
         }
       }
 
