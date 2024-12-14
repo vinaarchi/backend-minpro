@@ -37,24 +37,26 @@ model User {
 }
 
 model Event {
-  event_id       Int      @id @default(autoincrement())
-  name           String
-  description    String
-  price          Int
-  date           DateTime
-  time           DateTime
-  location       String
-  availableSeats Int
-  organiserId    Int
-  categoryId     Int
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  event_id         Int      @id @default(autoincrement())
+  name             String
+  description      String
+  price            Int
+  date             DateTime
+  time             DateTime
+  location         String
+  availableSeats   Int
+  organiserId      Int
+  categoryId       Int
+  locationDetailId Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
-  category   EventCategory @relation(fields: [categoryId], references: [id], name: "EventCategoryEvents")
-  organiser  User          @relation(fields: [organiserId], references: [id], name: "UserEvents")
-  reviews    Review[]
-  tickets    Ticket[]
-  promotions Promotion[]
+  category       EventCategory  @relation(fields: [categoryId], references: [id], name: "EventCategoryEvents")
+  organiser      User           @relation(fields: [organiserId], references: [id], name: "UserEvents")
+  locationDetail LocationDetail @relation(fields: [locationDetailId], references: [id])
+  reviews        Review[]
+  tickets        Ticket[]
+  promotions     Promotion[]
 }
 
 model EventCategory {
@@ -65,6 +67,17 @@ model EventCategory {
   updatedAt   DateTime @updatedAt
 
   events Event[] @relation("EventCategoryEvents")
+}
+
+model LocationDetail {
+  id        Int      @id @default(autoincrement())
+  country   String
+  state     String
+  city      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  events Event[]
 }
 
 model Review {
