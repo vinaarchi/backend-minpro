@@ -8,6 +8,7 @@ import { EventRouter } from "./routers/eventRouter";
 import { ReviewRouter } from "./routers/reviewRouter";
 import { TicketRouter } from "./routers/ticketRouter";
 import { PromotionRouter } from "./routers/promotionRouter";
+import { EventCategoryRouter } from "./routers/eventCatRouter";
 
 const PORT = process.env.PORT || 8080;
 
@@ -32,6 +33,7 @@ class App {
     const reviewRouter = new ReviewRouter();
     const ticketRouter = new TicketRouter();
     const promotionRouter = new PromotionRouter();
+    const eventCategoryRouter = new EventCategoryRouter();
     this.app.get("/", (req: Request, res: Response): any => {
       return res.status(200).send("<h1>EVENT APPLICATION</h1>");
     });
@@ -40,6 +42,7 @@ class App {
     this.app.use("/reviews", reviewRouter.getRouter());
     this.app.use("/tickets", ticketRouter.getRouter());
     this.app.use("/promotions", promotionRouter.getRouter());
+    this.app.use("/event-categories", eventCategoryRouter.getRouter());
   }
 
   private errorHandler(): void {

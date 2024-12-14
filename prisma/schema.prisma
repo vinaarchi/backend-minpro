@@ -9,30 +9,30 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  username   String   @unique
-  fullname   String
-  email      String   @unique
-  password   String
-  imgProfile String?
-  isVerified Boolean  @default(false)
-  role       Role     @default(CUSTOMER)
-  referralCode String? @unique
-  referralUsedBy User[] @relation("UserReferrals")
-  referredBy User? @relation("UserReferrals", fields: [referredById], references: [id])
-  referredById      Int?  
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id             Int      @id @default(autoincrement())
+  username       String   @unique
+  fullname       String
+  email          String   @unique
+  password       String
+  imgProfile     String?
+  isVerified     Boolean  @default(false)
+  role           Role     @default(CUSTOMER)
+  referralCode   String?  @unique
+  referralUsedBy User[]   @relation("UserReferrals")
+  referredBy     User?    @relation("UserReferrals", fields: [referredById], references: [id])
+  referredById   Int?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  events       Event[]  @relation("UserEvents")
-  reviews Review[]
-  points PointBalance[]
+  events          Event[]          @relation("UserEvents")
+  reviews         Review[]
+  points          PointBalance[]
   discountCoupons DiscountCoupon[]
 }
 
@@ -46,13 +46,25 @@ model Event {
   location       String
   availableSeats Int
   organiserId    Int
+  categoryId     Int
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  organiser User @relation(fields: [organiserId], references: [id], name: "UserEvents")
-  reviews Review[]
-  tickets Ticket[]
+  category   EventCategory @relation(fields: [categoryId], references: [id], name: "EventCategoryEvents")
+  organiser  User          @relation(fields: [organiserId], references: [id], name: "UserEvents")
+  reviews    Review[]
+  tickets    Ticket[]
   promotions Promotion[]
+}
+
+model EventCategory {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  events Event[] @relation("EventCategoryEvents")
 }
 
 model Review {
@@ -97,27 +109,27 @@ model Promotion {
 }
 
 model PointBalance {
-  id Int @id @default(autoincrement())
-  points Int @default(0)
+  id             Int       @id @default(autoincrement())
+  points         Int       @default(0)
   expirationDate DateTime?
-  userId Int
-  user User @relation(fields: [userId], references: [id])
+  userId         Int
+  user           User      @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  updateAt  DateTime @updatedAt
 }
 
 model DiscountCoupon {
-  id Int @id @default(autoincrement())
-  code String @unique
-  discount Int
+  id             Int      @id @default(autoincrement())
+  code           String   @unique
+  discount       Int
   expirationDate DateTime
-  userId Int
-  user User @relation(fields: [userId], references: [id])
-  
+  userId         Int
+  user           User     @relation(fields: [userId], references: [id])
+
   createdAt DateTime @default(now())
-  updateAt DateTime @updatedAt
-} 
+  updateAt  DateTime @updatedAt
+}
 
 enum Role {
   CUSTOMER
@@ -133,4 +145,3 @@ enum PromotionType {
   PERCENTAGE
   FLAT
 }
-
