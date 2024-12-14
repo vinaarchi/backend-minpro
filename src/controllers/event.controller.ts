@@ -8,7 +8,7 @@ const paginate = (page: number, limit: number) => ({
 });
 
 export class EventsController {
-  // get all events
+  //get all events
   async getEvents(req: Request, res: Response): Promise<any> {
     try {
       const page = parseInt(req.query.page as string) || 1;
@@ -27,6 +27,10 @@ export class EventsController {
         },
         ...pagination,
         orderBy: { date: "asc" },
+        include: {
+          locationDetail: true,
+          category: true,
+        },
       });
 
       const totalEvents = await prisma.event.count({
@@ -56,7 +60,11 @@ export class EventsController {
     try {
       const event = await prisma.event.findUnique({
         where: { event_id: eventId },
-        include: { organiser: true },
+        include: {
+          organiser: true,
+          locationDetail: true,
+          category: true,
+        },
       });
 
       if (!event) {
@@ -81,6 +89,8 @@ export class EventsController {
       location,
       availableSeats,
       organiserId,
+      categoryId,
+      locationDetailId,
     } = req.body;
 
     if (
@@ -89,7 +99,9 @@ export class EventsController {
       !time ||
       !location ||
       !availableSeats ||
-      !organiserId
+      !organiserId ||
+      !categoryId ||
+      !locationDetailId
     ) {
       return res.status(400).json({ error: "Missing required fields" });
     }
@@ -106,10 +118,12 @@ export class EventsController {
       if (organiser.role !== "ORGANIZER") {
         return res.status(403).json({ error: "User is not an organizer" });
       }
+
       const dateTime = new Date(`${date}T${time}.000Z`);
       if (isNaN(dateTime.getTime())) {
         return res.status(400).json({ error: "Invalid date or time format" });
       }
+
       const event = await prisma.event.create({
         data: {
           name,
@@ -120,6 +134,8 @@ export class EventsController {
           location,
           availableSeats,
           organiserId,
+          categoryId,
+          locationDetailId,
         },
       });
 
@@ -133,8 +149,17 @@ export class EventsController {
   //update event
   async updateEvent(req: Request, res: Response): Promise<any> {
     const eventId = parseInt(req.params.id);
-    const { name, description, price, date, time, location, availableSeats } =
-      req.body;
+    const {
+      name,
+      description,
+      price,
+      date,
+      time,
+      location,
+      availableSeats,
+      categoryId,
+      locationDetailId,
+    } = req.body;
 
     try {
       const event = await prisma.event.findUnique({
@@ -160,6 +185,8 @@ export class EventsController {
           ...(time && { time: dateTime }),
           ...(location && { location }),
           ...(availableSeats !== undefined && { availableSeats }),
+          ...(categoryId && { categoryId }),
+          ...(locationDetailId && { locationDetailId }),
         },
       });
 
