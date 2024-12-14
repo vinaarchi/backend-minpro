@@ -12,8 +12,10 @@ export class UserRouter {
     this.initializeRoutes();
   }
   private initializeRoutes(): void {
-    this.route.post("/register", regisValidation, this.userController.register);
-    this.route.post("/signin", this.userController.signIn);
+    this.route.post("/sign-up", regisValidation, this.userController.register);
+    this.route.post("/sign-in", this.userController.signIn);
+    this.route.post("/keep-login", this.userController.keepLogin);
+
   }
 
   public getRouter(): Router {
