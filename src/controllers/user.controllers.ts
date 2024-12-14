@@ -160,4 +160,94 @@ export class UserController {
       });
     }
   }
+
+  async getUserById(req: Request, res: Response): Promise<any> {
+    try {
+      const userId = parseInt(req.params.id); //dapetin id pengguna dari parameter
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+      });
+
+      if (!user) {
+        return ResponseHandler.error(res, "User not Found", 404);
+      }
+
+      return ResponseHandler.success(
+        res,
+        "User data fetched successfully",
+        200,
+        user
+      );
+    } catch (error: any) {
+      console.log(error);
+      return ResponseHandler.error(
+        res,
+        "Failed to fetch user data",
+        error.rc || 500,
+        error
+      );
+    }
+  }
+
+  async updateUser(req: Request, res: Response): Promise<any> {
+    try {
+      const userId = parseInt(req.params.id);
+      const updatedData = req.body;
+
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+      });
+      if (!user) {
+        return ResponseHandler.error(res, "User not Found", 404);
+      }
+
+      //Buat update data pengguna
+      const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: updatedData,
+      });
+
+      return ResponseHandler.success(
+        res,
+        "User Updatedd successfully",
+        200,
+        updatedUser
+      );
+    } catch (error: any) {
+      console.log(error);
+      return ResponseHandler.error(
+        res,
+        "Failed to update data",
+        error.rc || 500,
+        error
+      );
+    }
+  }
+
+  async deleteUser(req: Request, res: Response): Promise<any> {
+    try {
+      const userId = parseInt(req.params.id);
+
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+      });
+      if (!user) {
+        return ResponseHandler.error(res, "User not Found", 404);
+      }
+
+      await prisma.user.delete({
+        where: { id: userId },
+      });
+
+      return ResponseHandler.success(res, "User deleted successfully", 200);
+    } catch (error: any) {
+      console.log(error);
+      return ResponseHandler.error(
+        res,
+        "Failed to delete user",
+        error.rc || 500,
+        error
+      );
+    }
+  }
 }
