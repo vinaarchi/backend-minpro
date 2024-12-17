@@ -70,18 +70,18 @@ export class UserController {
         { expiresIn: "1h" }
       );
 
-      return ResponseHandler.success(res, "Your signup is success", 201, {
-        token,
-        user,
-      });
+      return ResponseHandler.success(
+        res,
+        "Your signup is success, please check your email",
+        201,
+        {
+          token,
+          user,
+        }
+      );
     } catch (error: any) {
       console.log(error);
-      return ResponseHandler.error(
-        res,
-        "Registration failed",
-        error.rc || 500,
-        error
-      );
+      return ResponseHandler.error(res, "Registration failed", error, 500);
     }
   }
 
