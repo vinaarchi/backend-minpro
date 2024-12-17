@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -15,29 +9,28 @@ datasource db {
 }
 
 model User {
-  id             Int      @id @default(autoincrement())
-  username       String   @unique
-  fullname       String
-  email          String   @unique
-  password       String
-  imgProfile     String?
-  isVerified     Boolean  @default(false)
-  role           Role     @default(CUSTOMER)
-  referralCode   String?  @unique
-  referralUsedBy User[]   @relation("UserReferrals")
-  referredBy     User?    @relation("UserReferrals", fields: [referredById], references: [id])
-  referredById   Int?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  events          Event[]          @relation("UserEvents")
-  reviews         Review[]
-  points          PointBalance[]
+  id              Int              @id @default(autoincrement())
+  username        String           @unique
+  fullname        String
+  email           String           @unique
+  password        String
+  imgProfile      String?
+  isVerified      Boolean          @default(false)
+  role            Role             @default(CUSTOMER)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  referralCode    String?          @unique
+  referredById    Int?
   discountCoupons DiscountCoupon[]
+  events          Event[]          @relation("UserEvents")
+  points          PointBalance[]
+  reviews         Review[]
+  referredBy      User?            @relation("UserReferrals", fields: [referredById], references: [id])
+  referralUsedBy  User[]           @relation("UserReferrals")
 }
 
 model Event {
-  event_id         Int      @id @default(autoincrement())
+  event_id         Int            @id @default(autoincrement())
   name             String
   description      String
   price            Int
@@ -46,17 +39,16 @@ model Event {
   location         String
   availableSeats   Int
   organiserId      Int
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
   categoryId       Int
   locationDetailId Int
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-
-  category       EventCategory  @relation(fields: [categoryId], references: [id], name: "EventCategoryEvents")
-  organiser      User           @relation(fields: [organiserId], references: [id], name: "UserEvents")
-  locationDetail LocationDetail @relation(fields: [locationDetailId], references: [id])
-  reviews        Review[]
-  tickets        Ticket[]
-  promotions     Promotion[]
+  category         EventCategory  @relation("EventCategoryEvents", fields: [categoryId], references: [id])
+  locationDetail   LocationDetail @relation(fields: [locationDetailId], references: [id])
+  organiser        User           @relation("UserEvents", fields: [organiserId], references: [id])
+  promotions       Promotion[]
+  reviews          Review[]
+  tickets          Ticket[]
 }
 
 model EventCategory {
@@ -65,8 +57,7 @@ model EventCategory {
   description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  events Event[] @relation("EventCategoryEvents")
+  events      Event[]  @relation("EventCategoryEvents")
 }
 
 model LocationDetail {
@@ -76,8 +67,7 @@ model LocationDetail {
   city      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  events Event[]
+  events    Event[]
 }
 
 model Review {
@@ -88,9 +78,8 @@ model Review {
   comment   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  event Event @relation(fields: [eventId], references: [event_id])
-  user  User  @relation(fields: [userId], references: [id])
+  event     Event    @relation(fields: [eventId], references: [event_id])
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Ticket {
@@ -101,8 +90,7 @@ model Ticket {
   available  Int
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
-
-  event Event @relation(fields: [eventId], references: [event_id])
+  event      Event      @relation(fields: [eventId], references: [event_id])
 }
 
 model Promotion {
@@ -117,8 +105,7 @@ model Promotion {
   useCount       Int           @default(0)
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
-
-  event Event @relation(fields: [eventId], references: [event_id])
+  event          Event         @relation(fields: [eventId], references: [event_id])
 }
 
 model PointBalance {
@@ -126,22 +113,20 @@ model PointBalance {
   points         Int       @default(0)
   expirationDate DateTime?
   userId         Int
+  createdAt      DateTime  @default(now())
+  updateAt       DateTime  @updatedAt
   user           User      @relation(fields: [userId], references: [id])
-
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
 }
 
 model DiscountCoupon {
   id             Int      @id @default(autoincrement())
   code           String   @unique
   discount       Int
-  expirationDate DateTime
   userId         Int
+  createdAt      DateTime @default(now())
+  updateAt       DateTime @updatedAt
+  expirationDate DateTime
   user           User     @relation(fields: [userId], references: [id])
-
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
 }
 
 enum Role {
