@@ -10,8 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EventCategoryController = void 0;
-const client_1 = require("@prisma/client");
-const prisma = new client_1.PrismaClient();
+const prisma_1 = require("../config/prisma");
 class EventCategoryController {
     //create a new event category
     createCategory(req, res) {
@@ -21,7 +20,7 @@ class EventCategoryController {
                 return res.status(400).json({ error: "Name is required" });
             }
             try {
-                const category = yield prisma.eventCategory.create({
+                const category = yield prisma_1.prisma.eventCategory.create({
                     data: { name, description },
                 });
                 res.status(201).json(category);
@@ -36,7 +35,7 @@ class EventCategoryController {
     getAllCategories(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const categories = yield prisma.eventCategory.findMany();
+                const categories = yield prisma_1.prisma.eventCategory.findMany();
                 res.status(200).json(categories);
             }
             catch (error) {
@@ -53,7 +52,7 @@ class EventCategoryController {
                 return res.status(400).json({ error: "Invalid ID format" });
             }
             try {
-                const category = yield prisma.eventCategory.findUnique({
+                const category = yield prisma_1.prisma.eventCategory.findUnique({
                     where: { id },
                 });
                 if (!category) {
@@ -76,13 +75,13 @@ class EventCategoryController {
                 return res.status(400).json({ error: "Invalid ID format" });
             }
             try {
-                const category = yield prisma.eventCategory.findUnique({
+                const category = yield prisma_1.prisma.eventCategory.findUnique({
                     where: { id },
                 });
                 if (!category) {
                     return res.status(404).json({ error: "Event category not found" });
                 }
-                const updatedCategory = yield prisma.eventCategory.update({
+                const updatedCategory = yield prisma_1.prisma.eventCategory.update({
                     where: { id },
                     data: Object.assign(Object.assign({}, (name !== undefined && { name })), (description !== undefined && { description })),
                 });
@@ -102,13 +101,13 @@ class EventCategoryController {
                 return res.status(400).json({ error: "Invalid ID format" });
             }
             try {
-                const category = yield prisma.eventCategory.findUnique({
+                const category = yield prisma_1.prisma.eventCategory.findUnique({
                     where: { id },
                 });
                 if (!category) {
                     return res.status(404).json({ error: "Event category not found" });
                 }
-                yield prisma.eventCategory.delete({
+                yield prisma_1.prisma.eventCategory.delete({
                     where: { id },
                 });
                 res.status(200).json({ message: "Event category deleted successfully" });
