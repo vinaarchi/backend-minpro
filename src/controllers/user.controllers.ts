@@ -250,4 +250,20 @@ export class UserController {
       );
     }
   }
+
+  async verifyUser(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
+    try {
+      await prisma.user.update({
+        where: { id: parseInt(res.locals.decript.id) },
+        data: { isVerified: true },
+      });
+      ResponseHandler.success(res, "Your Account is verified", 201);
+    } catch (error: any) {
+      next(error);
+    }
+  }
 }
