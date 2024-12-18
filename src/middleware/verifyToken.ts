@@ -5,7 +5,7 @@ export const verifyToken = (
     req: Request, res: Response, next: NextFunction
 ) => {
     try {
-        console.log("from request header", req.headers)\
+        console.log("from request header", req.headers)
         const token = req.headers.authorization?.split(" ")[1]
         console.log(token)
 
