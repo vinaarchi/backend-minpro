@@ -20,6 +20,9 @@ export class UserRouter {
     this.route.get("/:id", this.userController.getUserById);
     this.route.patch("/:id", this.userController.updateUser);
     this.route.delete("/:id", this.userController.deleteUser);
+
+    this.route.post("/forgot-password", this.userController.forgotPassword)
+    this.route.patch("/reset-password", verifyToken, this.userController.resetPassword)
   }
 
   public getRouter(): Router {

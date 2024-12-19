@@ -276,4 +276,70 @@ export class UserController {
       next(error);
     }
   }
+
+  async forgotPassword(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
+    try {
+      const { email } = req.body;
+
+      //ini cari user berdasarkan emailnya
+      const user = await prisma.user.findUnique({
+        where: { email },
+      });
+      if (!user) {
+        throw { rc: 404, message: "Email is not exist" };
+      }
+
+      const resetToken = sign(
+        { userId: user.id },
+        process.env.TOKEN_KEY || "test",
+        { expiresIn: "30m" }
+      );
+
+      await sendEmail(req.body.email, "Forgot Password", "forgot.hbs", {
+        username: req.body.username,
+        link: `${process.env.FE_URL}/reset-password?a_t=${resetToken}`,
+      });
+
+      return ResponseHandler.success(
+        res,
+        "Check Your Email To Reset Password",
+        201
+      );
+    } catch (error) {
+      return res.status(500).send({
+        message: "Check your email to Reset Passwowrd is failed",
+      });
+    }
+  }
+
+  async resetPassword(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
+    try {
+      const newPassword = await hashPassword(req.body.newPassword);
+      const userId = parseInt(res.locals.decript.userId);
+      console.log({ newPassword, userId });
+
+      await prisma.user.update({
+        where: { id: userId },
+        data: { password: newPassword },
+      });
+
+      ResponseHandler.success(
+        res,
+        "Your New Password has been Successfully Updated",
+        201
+      );
+    } catch (error) {
+      return res.status(500).send({
+        message: "Failed to Create New Password",
+      });
+    }
+  }
 }
