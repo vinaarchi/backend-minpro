@@ -4,9 +4,21 @@ import { prisma } from "../config/prisma";
 export class TicketController {
   //create ticket
   async addTicket(req: Request, res: Response): Promise<any> {
-    const { eventId, ticketType, price, available } = req.body;
+    const {
+      eventId,
+      isPaid,
+      ticketName,
+      description,
+      price,
+      contactName,
+      contactEmail,
+      contactNumber,
+      startDate,
+      expiredDate,
+      available,
+    } = req.body;
 
-    if (!eventId || !ticketType || !price || available === undefined) {
+    if (!eventId || !isPaid || !price || available === undefined) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
@@ -19,7 +31,19 @@ export class TicketController {
         return res.status(404).json({ error: "Event not found" });
       }
       const ticket = await prisma.ticket.create({
-        data: { eventId, ticketType, price, available },
+        data: {
+          eventId,
+          isPaid,
+          ticketName,
+          description,
+          price,
+          contactName,
+          contactEmail,
+          contactNumber,
+          startDate,
+          expiredDate,
+          available,
+        },
       });
 
       res.status(201).json(ticket);
