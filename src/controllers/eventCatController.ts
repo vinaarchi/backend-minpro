@@ -4,15 +4,15 @@ import { prisma } from "../config/prisma";
 export class EventCategoryController {
   //create a new event category
   async createCategory(req: Request, res: Response): Promise<any> {
-    const { name, description } = req.body;
+    const { topic, format } = req.body;
 
-    if (!name) {
-      return res.status(400).json({ error: "Name is required" });
-    }
+    // if (!name) {
+    //   return res.status(400).json({ error: "Name is required" });
+    // }
 
     try {
       const category = await prisma.eventCategory.create({
-        data: { name, description },
+        data: { topic, format },
       });
 
       res.status(201).json(category);

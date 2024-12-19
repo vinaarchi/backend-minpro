@@ -81,14 +81,14 @@ export class EventsController {
   //create event
   async createEvent(req: Request, res: Response): Promise<any> {
     const {
+      image,
       name,
       description,
-      price,
       date,
       time,
       location,
-      availableSeats,
       organiserId,
+      heldBy,
       categoryId,
       locationDetailId,
     } = req.body;
@@ -98,8 +98,8 @@ export class EventsController {
       !date ||
       !time ||
       !location ||
-      !availableSeats ||
       !organiserId ||
+      !heldBy ||
       !categoryId ||
       !locationDetailId
     ) {
@@ -128,12 +128,11 @@ export class EventsController {
         data: {
           name,
           description,
-          price,
           date: new Date(date),
           time: dateTime,
           location,
-          availableSeats,
           organiserId,
+          heldBy,
           categoryId,
           locationDetailId,
         },
