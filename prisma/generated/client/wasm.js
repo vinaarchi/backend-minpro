@@ -134,14 +134,14 @@ exports.Prisma.UserScalarFieldEnum = {
 
 exports.Prisma.EventScalarFieldEnum = {
   event_id: 'event_id',
+  image: 'image',
   name: 'name',
   description: 'description',
-  price: 'price',
   date: 'date',
   time: 'time',
   location: 'location',
-  availableSeats: 'availableSeats',
   organiserId: 'organiserId',
+  heldBy: 'heldBy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   categoryId: 'categoryId',
@@ -150,8 +150,8 @@ exports.Prisma.EventScalarFieldEnum = {
 
 exports.Prisma.EventCategoryScalarFieldEnum = {
   id: 'id',
-  name: 'name',
-  description: 'description',
+  topic: 'topic',
+  format: 'format',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -178,8 +178,15 @@ exports.Prisma.ReviewScalarFieldEnum = {
 exports.Prisma.TicketScalarFieldEnum = {
   ticket_id: 'ticket_id',
   eventId: 'eventId',
-  ticketType: 'ticketType',
+  isPaid: 'isPaid',
+  ticketName: 'ticketName',
+  description: 'description',
   price: 'price',
+  contactName: 'contactName',
+  contactEmail: 'contactEmail',
+  contactNumber: 'contactNumber',
+  startDate: 'startDate',
+  expiredDate: 'expiredDate',
   available: 'available',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -237,9 +244,52 @@ exports.Role = exports.$Enums.Role = {
   ORGANIZER: 'ORGANIZER'
 };
 
-exports.TicketType = exports.$Enums.TicketType = {
-  REGULAR: 'REGULAR',
-  VIP: 'VIP'
+exports.Topic = exports.$Enums.Topic = {
+  ANAK_KELUARGA: 'ANAK_KELUARGA',
+  BISNIS: 'BISNIS',
+  DESAIN: 'DESAIN',
+  FASHION_BEAUTY: 'FASHION_BEAUTY',
+  FILM: 'FILM',
+  GAME: 'GAME',
+  HOBI: 'HOBI',
+  INVESTASI: 'INVESTASI',
+  KARIR: 'KARIR',
+  KEAGAMAAN: 'KEAGAMAAN',
+  KESEHATAN: 'KESEHATAN',
+  KEUANGAN: 'KEUANGAN',
+  LINGKUNGAN: 'LINGKUNGAN',
+  MAKANAN_MINUMAN: 'MAKANAN_MINUMAN',
+  MARKETING: 'MARKETING',
+  MUSIK: 'MUSIK',
+  OLAHRAGA: 'OLAHRAGA',
+  OTOMOTIF: 'OTOMOTIF',
+  SAINS_TEKNOLOGI: 'SAINS_TEKNOLOGI',
+  SENI_BUDAYA: 'SENI_BUDAYA',
+  SOSHUMPOL: 'SOSHUMPOL',
+  STANDUP_KOMEDI: 'STANDUP_KOMEDI',
+  PENDIDIKAN: 'PENDIDIKAN',
+  TECH_STARTUP: 'TECH_STARTUP',
+  WISATA: 'WISATA',
+  LAINNYA: 'LAINNYA'
+};
+
+exports.Format = exports.$Enums.Format = {
+  FESTIVAL: 'FESTIVAL',
+  KONSER: 'KONSER',
+  PERTANDINGAN: 'PERTANDINGAN',
+  EXHIBITION: 'EXHIBITION',
+  KONFERENSI: 'KONFERENSI',
+  WORKSHOP: 'WORKSHOP',
+  PERTUNJUKAN: 'PERTUNJUKAN',
+  ATRAKSI: 'ATRAKSI',
+  THEME_PARK: 'THEME_PARK',
+  AKOMODASI: 'AKOMODASI',
+  SEMINAR: 'SEMINAR',
+  SOCIAL_GATHERING: 'SOCIAL_GATHERING',
+  TRAINING: 'TRAINING',
+  SCHOOL_EVENT: 'SCHOOL_EVENT',
+  TRIP: 'TRIP',
+  LAINNYA: 'LAINNYA'
 };
 
 exports.PromotionType = exports.$Enums.PromotionType = {
