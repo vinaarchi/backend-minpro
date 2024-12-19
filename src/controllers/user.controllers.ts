@@ -54,6 +54,15 @@ export class UserController {
         }
       }
 
+      const validRoles = ["CUSTOMER", "ORGANIZER"];
+      if (!validRoles.includes(req.body.role)) {
+        return ResponseHandler.error(
+          res,
+          "Invalid role selected. Please choose a valid role.",
+          400
+        );
+      }
+
       // buat pengguna baru
       const user = await prisma.user.create({
         data: {
@@ -61,6 +70,7 @@ export class UserController {
           password: newPassword,
           referralCode: referralCode,
           referredById: referredById,
+          role: req.body.role,
         },
       });
 
