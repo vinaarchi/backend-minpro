@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output = "./generated/client"
+  output   = "./generated/client"
 }
 
 datasource db {
@@ -32,14 +32,14 @@ model User {
 
 model Event {
   event_id         Int            @id @default(autoincrement())
+  image            String?
   name             String
   description      String
-  price            Int
   date             DateTime
   time             DateTime
   location         String
-  availableSeats   Int
   organiserId      Int
+  heldBy           String         @default("unknown")
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
   categoryId       Int
@@ -53,12 +53,12 @@ model Event {
 }
 
 model EventCategory {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  events      Event[]  @relation("EventCategoryEvents")
+  id        Int      @id @default(autoincrement())
+  topic     Topic    @default(LAINNYA)
+  format    Format   @default(LAINNYA)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  events    Event[]  @relation("EventCategoryEvents")
 }
 
 model LocationDetail {
@@ -84,14 +84,21 @@ model Review {
 }
 
 model Ticket {
-  ticket_id  Int        @id @default(autoincrement())
-  eventId    Int
-  ticketType TicketType
-  price      Int
-  available  Int
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  event      Event      @relation(fields: [eventId], references: [event_id])
+  ticket_id     Int      @id @default(autoincrement())
+  eventId       Int
+  isPaid        Boolean
+  ticketName    String
+  description   String
+  price         Int?
+  contactName   String
+  contactEmail  String
+  contactNumber String
+  startDate     DateTime
+  expiredDate   DateTime
+  available     Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  event         Event    @relation(fields: [eventId], references: [event_id])
 }
 
 model Promotion {
@@ -143,4 +150,52 @@ enum TicketType {
 enum PromotionType {
   PERCENTAGE
   FLAT
+}
+
+enum Format {
+  FESTIVAL
+  KONSER
+  PERTANDINGAN
+  EXHIBITION
+  KONFERENSI
+  WORKSHOP
+  PERTUNJUKAN
+  ATRAKSI
+  THEME_PARK
+  AKOMODASI
+  SEMINAR
+  SOCIAL_GATHERING
+  TRAINING
+  SCHOOL_EVENT
+  TRIP
+  LAINNYA
+}
+
+enum Topic {
+  ANAK_KELUARGA
+  BISNIS
+  DESAIN
+  FASHION_BEAUTY
+  FILM
+  GAME
+  HOBI
+  INVESTASI
+  KARIR
+  KEAGAMAAN
+  KESEHATAN
+  KEUANGAN
+  LINGKUNGAN
+  MAKANAN_MINUMAN
+  MARKETING
+  MUSIK
+  OLAHRAGA
+  OTOMOTIF
+  SAINS_TEKNOLOGI
+  SENI_BUDAYA
+  SOSHUMPOL
+  STANDUP_KOMEDI
+  PENDIDIKAN
+  TECH_STARTUP
+  WISATA
+  LAINNYA
 }
