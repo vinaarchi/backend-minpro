@@ -54,15 +54,6 @@ export class UserController {
         }
       }
 
-      const validRoles = ["CUSTOMER", "ORGANIZER"];
-      if (!validRoles.includes(req.body.role)) {
-        return ResponseHandler.error(
-          res,
-          "Invalid role selected. Please choose a valid role.",
-          400
-        );
-      }
-
       // buat pengguna baru
       const user = await prisma.user.create({
         data: {
@@ -70,7 +61,6 @@ export class UserController {
           password: newPassword,
           referralCode: referralCode,
           referredById: referredById,
-          role: req.body.role,
         },
       });
 
@@ -135,11 +125,7 @@ export class UserController {
     }
   }
 
-  async keepLogin(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<any> {
+  async keepLogin(req: Request, res: Response): Promise<any> {
     try {
       // data dari middleware
       console.log("at keepLogin controller", res.locals.decript);
@@ -167,6 +153,28 @@ export class UserController {
         message: "Your keepLogin is failed",
         success: false,
         error: error.message,
+      });
+    }
+  }
+
+  async switchRole(req: Request, res: Response): Promise<any> {
+    try {
+      const userId = parseInt(req.params.id);
+      const { role } = req.body;
+
+      const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: { role: role },
+      });
+
+      return res.status(200).send({
+        message: `Role updated to ${role} successfully.`,
+        user: updatedUser,
+      });
+    } catch (error: any) {
+      console.log(error);
+      return res.status(500).send({
+        message: "Filed to switch role",
       });
     }
   }
