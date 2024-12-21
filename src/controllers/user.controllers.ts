@@ -7,6 +7,8 @@ import { sendEmail } from "../utils/emailSender";
 import { compareSync } from "bcrypt";
 import { generateReferralCode } from "../utils/generateReferralCode";
 import { addReferralPoints } from "../services/point.service";
+import { transporter } from "../config/nodemailer";
+import { register } from "node:module";
 // import { createDiscountCoupon } from "../services/discount.service";
 
 export class UserController {
@@ -69,6 +71,11 @@ export class UserController {
         process.env.TOKEN_KEY || "secret",
         { expiresIn: "1h" }
       );
+
+      await sendEmail(req.body.email, "Registration Info", "register.hbs", {
+        username: req.body.username,
+        link: `${process.env.FE_URL}/verify?a_t=${token}`,
+      });
 
       return ResponseHandler.success(
         res,

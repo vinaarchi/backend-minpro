@@ -15,7 +15,7 @@ export const sendEmail = async (
     const compileTemplate = Handlebars.compile(templateSource);
     const html = compileTemplate(data);
     await transporter.sendMail({
-      from: process.env.MAL_SENDER,
+      from: process.env.MAIL_SENDER,
       to: email,
       subject,
       html,

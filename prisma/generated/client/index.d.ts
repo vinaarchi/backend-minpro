@@ -432,8 +432,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.0.1
-   * Query Engine version: 5dbef10bdbfb579e07d35cc85fb1518d357cb99e
+   * Prisma Client JS version: 6.1.0
+   * Query Engine version: 11f085a2012c0f4778414c8db2651556ee0ef959
    */
   export type PrismaVersion = {
     client: string
@@ -11623,12 +11623,12 @@ export namespace Prisma {
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    username?: string
     email?: string
     referralCode?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
+    username?: StringFilter<"User"> | string
     fullname?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     imgProfile?: StringNullableFilter<"User"> | string | null
@@ -11643,7 +11643,7 @@ export namespace Prisma {
     reviews?: ReviewListRelationFilter
     referredBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     referralUsedBy?: UserListRelationFilter
-  }, "id" | "username" | "email" | "referralCode">
+  }, "id" | "email" | "referralCode">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
