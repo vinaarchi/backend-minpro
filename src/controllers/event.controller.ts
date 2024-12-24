@@ -155,7 +155,6 @@ export class EventsController {
       date,
       time,
       location,
-      availableSeats,
       categoryId,
       locationDetailId,
     } = req.body;
@@ -183,7 +182,7 @@ export class EventsController {
           ...(date && { date: new Date(date) }),
           ...(time && { time: dateTime }),
           ...(location && { location }),
-          ...(availableSeats !== undefined && { availableSeats }),
+
           ...(categoryId && { categoryId }),
           ...(locationDetailId && { locationDetailId }),
         },

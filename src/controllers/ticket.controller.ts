@@ -6,7 +6,7 @@ export class TicketController {
   async addTicket(req: Request, res: Response): Promise<any> {
     const {
       eventId,
-      isPaid,
+      type,
       ticketName,
       description,
       price,
@@ -18,7 +18,7 @@ export class TicketController {
       available,
     } = req.body;
 
-    if (!eventId || !isPaid || !price || available === undefined) {
+    if (!eventId || !type || !price || available === undefined) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
@@ -33,7 +33,7 @@ export class TicketController {
       const ticket = await prisma.ticket.create({
         data: {
           eventId,
-          isPaid,
+          type,
           ticketName,
           description,
           price,
