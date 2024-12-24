@@ -3164,7 +3164,7 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     categoryId: number | null
-    locationDetailId: number
+    locationDetailId: number | null
     heldBy: string
     image: string | null
     _count: EventCountAggregateOutputType | null
@@ -3203,7 +3203,7 @@ export namespace Prisma {
     heldBy?: boolean
     image?: boolean
     category?: boolean | Event$categoryArgs<ExtArgs>
-    locationDetail?: boolean | LocationDetailDefaultArgs<ExtArgs>
+    locationDetail?: boolean | Event$locationDetailArgs<ExtArgs>
     organiser?: boolean | UserDefaultArgs<ExtArgs>
     promotions?: boolean | Event$promotionsArgs<ExtArgs>
     reviews?: boolean | Event$reviewsArgs<ExtArgs>
@@ -3226,7 +3226,7 @@ export namespace Prisma {
     heldBy?: boolean
     image?: boolean
     category?: boolean | Event$categoryArgs<ExtArgs>
-    locationDetail?: boolean | LocationDetailDefaultArgs<ExtArgs>
+    locationDetail?: boolean | Event$locationDetailArgs<ExtArgs>
     organiser?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
@@ -3248,7 +3248,7 @@ export namespace Prisma {
 
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | Event$categoryArgs<ExtArgs>
-    locationDetail?: boolean | LocationDetailDefaultArgs<ExtArgs>
+    locationDetail?: boolean | Event$locationDetailArgs<ExtArgs>
     organiser?: boolean | UserDefaultArgs<ExtArgs>
     promotions?: boolean | Event$promotionsArgs<ExtArgs>
     reviews?: boolean | Event$reviewsArgs<ExtArgs>
@@ -3257,7 +3257,7 @@ export namespace Prisma {
   }
   export type EventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | Event$categoryArgs<ExtArgs>
-    locationDetail?: boolean | LocationDetailDefaultArgs<ExtArgs>
+    locationDetail?: boolean | Event$locationDetailArgs<ExtArgs>
     organiser?: boolean | UserDefaultArgs<ExtArgs>
   }
 
@@ -3265,7 +3265,7 @@ export namespace Prisma {
     name: "Event"
     objects: {
       category: Prisma.$EventCategoryPayload<ExtArgs> | null
-      locationDetail: Prisma.$LocationDetailPayload<ExtArgs>
+      locationDetail: Prisma.$LocationDetailPayload<ExtArgs> | null
       organiser: Prisma.$UserPayload<ExtArgs>
       promotions: Prisma.$PromotionPayload<ExtArgs>[]
       reviews: Prisma.$ReviewPayload<ExtArgs>[]
@@ -3282,7 +3282,7 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       categoryId: number | null
-      locationDetailId: number
+      locationDetailId: number | null
       heldBy: string
       image: string | null
     }, ExtArgs["result"]["event"]>
@@ -3650,7 +3650,7 @@ export namespace Prisma {
   export interface Prisma__EventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     category<T extends Event$categoryArgs<ExtArgs> = {}>(args?: Subset<T, Event$categoryArgs<ExtArgs>>): Prisma__EventCategoryClient<$Result.GetResult<Prisma.$EventCategoryPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
-    locationDetail<T extends LocationDetailDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LocationDetailDefaultArgs<ExtArgs>>): Prisma__LocationDetailClient<$Result.GetResult<Prisma.$LocationDetailPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    locationDetail<T extends Event$locationDetailArgs<ExtArgs> = {}>(args?: Subset<T, Event$locationDetailArgs<ExtArgs>>): Prisma__LocationDetailClient<$Result.GetResult<Prisma.$LocationDetailPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     organiser<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     promotions<T extends Event$promotionsArgs<ExtArgs> = {}>(args?: Subset<T, Event$promotionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PromotionPayload<ExtArgs>, T, "findMany"> | Null>
     reviews<T extends Event$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, Event$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany"> | Null>
@@ -4027,6 +4027,21 @@ export namespace Prisma {
      */
     include?: EventCategoryInclude<ExtArgs> | null
     where?: EventCategoryWhereInput
+  }
+
+  /**
+   * Event.locationDetail
+   */
+  export type Event$locationDetailArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LocationDetail
+     */
+    select?: LocationDetailSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationDetailInclude<ExtArgs> | null
+    where?: LocationDetailWhereInput
   }
 
   /**
@@ -11610,11 +11625,11 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
     categoryId?: IntNullableFilter<"Event"> | number | null
-    locationDetailId?: IntFilter<"Event"> | number
+    locationDetailId?: IntNullableFilter<"Event"> | number | null
     heldBy?: StringFilter<"Event"> | string
     image?: StringNullableFilter<"Event"> | string | null
     category?: XOR<EventCategoryNullableScalarRelationFilter, EventCategoryWhereInput> | null
-    locationDetail?: XOR<LocationDetailScalarRelationFilter, LocationDetailWhereInput>
+    locationDetail?: XOR<LocationDetailNullableScalarRelationFilter, LocationDetailWhereInput> | null
     organiser?: XOR<UserScalarRelationFilter, UserWhereInput>
     promotions?: PromotionListRelationFilter
     reviews?: ReviewListRelationFilter
@@ -11632,7 +11647,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     categoryId?: SortOrderInput | SortOrder
-    locationDetailId?: SortOrder
+    locationDetailId?: SortOrderInput | SortOrder
     heldBy?: SortOrder
     image?: SortOrderInput | SortOrder
     category?: EventCategoryOrderByWithRelationInput
@@ -11657,11 +11672,11 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
     categoryId?: IntNullableFilter<"Event"> | number | null
-    locationDetailId?: IntFilter<"Event"> | number
+    locationDetailId?: IntNullableFilter<"Event"> | number | null
     heldBy?: StringFilter<"Event"> | string
     image?: StringNullableFilter<"Event"> | string | null
     category?: XOR<EventCategoryNullableScalarRelationFilter, EventCategoryWhereInput> | null
-    locationDetail?: XOR<LocationDetailScalarRelationFilter, LocationDetailWhereInput>
+    locationDetail?: XOR<LocationDetailNullableScalarRelationFilter, LocationDetailWhereInput> | null
     organiser?: XOR<UserScalarRelationFilter, UserWhereInput>
     promotions?: PromotionListRelationFilter
     reviews?: ReviewListRelationFilter
@@ -11679,7 +11694,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     categoryId?: SortOrderInput | SortOrder
-    locationDetailId?: SortOrder
+    locationDetailId?: SortOrderInput | SortOrder
     heldBy?: SortOrder
     image?: SortOrderInput | SortOrder
     _count?: EventCountOrderByAggregateInput
@@ -11703,7 +11718,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     categoryId?: IntNullableWithAggregatesFilter<"Event"> | number | null
-    locationDetailId?: IntWithAggregatesFilter<"Event"> | number
+    locationDetailId?: IntNullableWithAggregatesFilter<"Event"> | number | null
     heldBy?: StringWithAggregatesFilter<"Event"> | string
     image?: StringNullableWithAggregatesFilter<"Event"> | string | null
   }
@@ -12347,7 +12362,7 @@ export namespace Prisma {
     heldBy?: string
     image?: string | null
     category?: EventCategoryCreateNestedOneWithoutEventsInput
-    locationDetail: LocationDetailCreateNestedOneWithoutEventsInput
+    locationDetail?: LocationDetailCreateNestedOneWithoutEventsInput
     organiser: UserCreateNestedOneWithoutEventsInput
     promotions?: PromotionCreateNestedManyWithoutEventInput
     reviews?: ReviewCreateNestedManyWithoutEventInput
@@ -12365,7 +12380,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: number | null
-    locationDetailId: number
+    locationDetailId?: number | null
     heldBy?: string
     image?: string | null
     promotions?: PromotionUncheckedCreateNestedManyWithoutEventInput
@@ -12384,7 +12399,7 @@ export namespace Prisma {
     heldBy?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
     category?: EventCategoryUpdateOneWithoutEventsNestedInput
-    locationDetail?: LocationDetailUpdateOneRequiredWithoutEventsNestedInput
+    locationDetail?: LocationDetailUpdateOneWithoutEventsNestedInput
     organiser?: UserUpdateOneRequiredWithoutEventsNestedInput
     promotions?: PromotionUpdateManyWithoutEventNestedInput
     reviews?: ReviewUpdateManyWithoutEventNestedInput
@@ -12402,7 +12417,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableIntFieldUpdateOperationsInput | number | null
-    locationDetailId?: IntFieldUpdateOperationsInput | number
+    locationDetailId?: NullableIntFieldUpdateOperationsInput | number | null
     heldBy?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
     promotions?: PromotionUncheckedUpdateManyWithoutEventNestedInput
@@ -12421,7 +12436,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: number | null
-    locationDetailId: number
+    locationDetailId?: number | null
     heldBy?: string
     image?: string | null
   }
@@ -12449,7 +12464,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableIntFieldUpdateOperationsInput | number | null
-    locationDetailId?: IntFieldUpdateOperationsInput | number
+    locationDetailId?: NullableIntFieldUpdateOperationsInput | number | null
     heldBy?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -13269,9 +13284,9 @@ export namespace Prisma {
     isNot?: EventCategoryWhereInput | null
   }
 
-  export type LocationDetailScalarRelationFilter = {
-    is?: LocationDetailWhereInput
-    isNot?: LocationDetailWhereInput
+  export type LocationDetailNullableScalarRelationFilter = {
+    is?: LocationDetailWhereInput | null
+    isNot?: LocationDetailWhereInput | null
   }
 
   export type UserScalarRelationFilter = {
@@ -14055,10 +14070,12 @@ export namespace Prisma {
     update?: XOR<XOR<EventCategoryUpdateToOneWithWhereWithoutEventsInput, EventCategoryUpdateWithoutEventsInput>, EventCategoryUncheckedUpdateWithoutEventsInput>
   }
 
-  export type LocationDetailUpdateOneRequiredWithoutEventsNestedInput = {
+  export type LocationDetailUpdateOneWithoutEventsNestedInput = {
     create?: XOR<LocationDetailCreateWithoutEventsInput, LocationDetailUncheckedCreateWithoutEventsInput>
     connectOrCreate?: LocationDetailCreateOrConnectWithoutEventsInput
     upsert?: LocationDetailUpsertWithoutEventsInput
+    disconnect?: LocationDetailWhereInput | boolean
+    delete?: LocationDetailWhereInput | boolean
     connect?: LocationDetailWhereUniqueInput
     update?: XOR<XOR<LocationDetailUpdateToOneWithWhereWithoutEventsInput, LocationDetailUpdateWithoutEventsInput>, LocationDetailUncheckedUpdateWithoutEventsInput>
   }
@@ -14604,7 +14621,7 @@ export namespace Prisma {
     heldBy?: string
     image?: string | null
     category?: EventCategoryCreateNestedOneWithoutEventsInput
-    locationDetail: LocationDetailCreateNestedOneWithoutEventsInput
+    locationDetail?: LocationDetailCreateNestedOneWithoutEventsInput
     promotions?: PromotionCreateNestedManyWithoutEventInput
     reviews?: ReviewCreateNestedManyWithoutEventInput
     tickets?: TicketCreateNestedManyWithoutEventInput
@@ -14620,7 +14637,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: number | null
-    locationDetailId: number
+    locationDetailId?: number | null
     heldBy?: string
     image?: string | null
     promotions?: PromotionUncheckedCreateNestedManyWithoutEventInput
@@ -14838,7 +14855,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
     categoryId?: IntNullableFilter<"Event"> | number | null
-    locationDetailId?: IntFilter<"Event"> | number
+    locationDetailId?: IntNullableFilter<"Event"> | number | null
     heldBy?: StringFilter<"Event"> | string
     image?: StringNullableFilter<"Event"> | string | null
   }
@@ -15366,7 +15383,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     heldBy?: string
     image?: string | null
-    locationDetail: LocationDetailCreateNestedOneWithoutEventsInput
+    locationDetail?: LocationDetailCreateNestedOneWithoutEventsInput
     organiser: UserCreateNestedOneWithoutEventsInput
     promotions?: PromotionCreateNestedManyWithoutEventInput
     reviews?: ReviewCreateNestedManyWithoutEventInput
@@ -15383,7 +15400,7 @@ export namespace Prisma {
     organiserId: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    locationDetailId: number
+    locationDetailId?: number | null
     heldBy?: string
     image?: string | null
     promotions?: PromotionUncheckedCreateNestedManyWithoutEventInput
@@ -15489,7 +15506,7 @@ export namespace Prisma {
     heldBy?: string
     image?: string | null
     category?: EventCategoryCreateNestedOneWithoutEventsInput
-    locationDetail: LocationDetailCreateNestedOneWithoutEventsInput
+    locationDetail?: LocationDetailCreateNestedOneWithoutEventsInput
     organiser: UserCreateNestedOneWithoutEventsInput
     promotions?: PromotionCreateNestedManyWithoutEventInput
     tickets?: TicketCreateNestedManyWithoutEventInput
@@ -15506,7 +15523,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: number | null
-    locationDetailId: number
+    locationDetailId?: number | null
     heldBy?: string
     image?: string | null
     promotions?: PromotionUncheckedCreateNestedManyWithoutEventInput
@@ -15582,7 +15599,7 @@ export namespace Prisma {
     heldBy?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
     category?: EventCategoryUpdateOneWithoutEventsNestedInput
-    locationDetail?: LocationDetailUpdateOneRequiredWithoutEventsNestedInput
+    locationDetail?: LocationDetailUpdateOneWithoutEventsNestedInput
     organiser?: UserUpdateOneRequiredWithoutEventsNestedInput
     promotions?: PromotionUpdateManyWithoutEventNestedInput
     tickets?: TicketUpdateManyWithoutEventNestedInput
@@ -15599,7 +15616,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableIntFieldUpdateOperationsInput | number | null
-    locationDetailId?: IntFieldUpdateOperationsInput | number
+    locationDetailId?: NullableIntFieldUpdateOperationsInput | number | null
     heldBy?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
     promotions?: PromotionUncheckedUpdateManyWithoutEventNestedInput
@@ -15665,7 +15682,7 @@ export namespace Prisma {
     heldBy?: string
     image?: string | null
     category?: EventCategoryCreateNestedOneWithoutEventsInput
-    locationDetail: LocationDetailCreateNestedOneWithoutEventsInput
+    locationDetail?: LocationDetailCreateNestedOneWithoutEventsInput
     organiser: UserCreateNestedOneWithoutEventsInput
     promotions?: PromotionCreateNestedManyWithoutEventInput
     reviews?: ReviewCreateNestedManyWithoutEventInput
@@ -15682,7 +15699,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: number | null
-    locationDetailId: number
+    locationDetailId?: number | null
     heldBy?: string
     image?: string | null
     promotions?: PromotionUncheckedCreateNestedManyWithoutEventInput
@@ -15716,7 +15733,7 @@ export namespace Prisma {
     heldBy?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
     category?: EventCategoryUpdateOneWithoutEventsNestedInput
-    locationDetail?: LocationDetailUpdateOneRequiredWithoutEventsNestedInput
+    locationDetail?: LocationDetailUpdateOneWithoutEventsNestedInput
     organiser?: UserUpdateOneRequiredWithoutEventsNestedInput
     promotions?: PromotionUpdateManyWithoutEventNestedInput
     reviews?: ReviewUpdateManyWithoutEventNestedInput
@@ -15733,7 +15750,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableIntFieldUpdateOperationsInput | number | null
-    locationDetailId?: IntFieldUpdateOperationsInput | number
+    locationDetailId?: NullableIntFieldUpdateOperationsInput | number | null
     heldBy?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
     promotions?: PromotionUncheckedUpdateManyWithoutEventNestedInput
@@ -15751,7 +15768,7 @@ export namespace Prisma {
     heldBy?: string
     image?: string | null
     category?: EventCategoryCreateNestedOneWithoutEventsInput
-    locationDetail: LocationDetailCreateNestedOneWithoutEventsInput
+    locationDetail?: LocationDetailCreateNestedOneWithoutEventsInput
     organiser: UserCreateNestedOneWithoutEventsInput
     reviews?: ReviewCreateNestedManyWithoutEventInput
     tickets?: TicketCreateNestedManyWithoutEventInput
@@ -15768,7 +15785,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: number | null
-    locationDetailId: number
+    locationDetailId?: number | null
     heldBy?: string
     image?: string | null
     reviews?: ReviewUncheckedCreateNestedManyWithoutEventInput
@@ -15802,7 +15819,7 @@ export namespace Prisma {
     heldBy?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
     category?: EventCategoryUpdateOneWithoutEventsNestedInput
-    locationDetail?: LocationDetailUpdateOneRequiredWithoutEventsNestedInput
+    locationDetail?: LocationDetailUpdateOneWithoutEventsNestedInput
     organiser?: UserUpdateOneRequiredWithoutEventsNestedInput
     reviews?: ReviewUpdateManyWithoutEventNestedInput
     tickets?: TicketUpdateManyWithoutEventNestedInput
@@ -15819,7 +15836,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableIntFieldUpdateOperationsInput | number | null
-    locationDetailId?: IntFieldUpdateOperationsInput | number
+    locationDetailId?: NullableIntFieldUpdateOperationsInput | number | null
     heldBy?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
     reviews?: ReviewUncheckedUpdateManyWithoutEventNestedInput
@@ -16025,7 +16042,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: number | null
-    locationDetailId: number
+    locationDetailId?: number | null
     heldBy?: string
     image?: string | null
   }
@@ -16098,7 +16115,7 @@ export namespace Prisma {
     heldBy?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
     category?: EventCategoryUpdateOneWithoutEventsNestedInput
-    locationDetail?: LocationDetailUpdateOneRequiredWithoutEventsNestedInput
+    locationDetail?: LocationDetailUpdateOneWithoutEventsNestedInput
     promotions?: PromotionUpdateManyWithoutEventNestedInput
     reviews?: ReviewUpdateManyWithoutEventNestedInput
     tickets?: TicketUpdateManyWithoutEventNestedInput
@@ -16114,7 +16131,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableIntFieldUpdateOperationsInput | number | null
-    locationDetailId?: IntFieldUpdateOperationsInput | number
+    locationDetailId?: NullableIntFieldUpdateOperationsInput | number | null
     heldBy?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
     promotions?: PromotionUncheckedUpdateManyWithoutEventNestedInput
@@ -16132,7 +16149,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableIntFieldUpdateOperationsInput | number | null
-    locationDetailId?: IntFieldUpdateOperationsInput | number
+    locationDetailId?: NullableIntFieldUpdateOperationsInput | number | null
     heldBy?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -16396,7 +16413,7 @@ export namespace Prisma {
     organiserId: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    locationDetailId: number
+    locationDetailId?: number | null
     heldBy?: string
     image?: string | null
   }
@@ -16411,7 +16428,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     heldBy?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    locationDetail?: LocationDetailUpdateOneRequiredWithoutEventsNestedInput
+    locationDetail?: LocationDetailUpdateOneWithoutEventsNestedInput
     organiser?: UserUpdateOneRequiredWithoutEventsNestedInput
     promotions?: PromotionUpdateManyWithoutEventNestedInput
     reviews?: ReviewUpdateManyWithoutEventNestedInput
@@ -16428,7 +16445,7 @@ export namespace Prisma {
     organiserId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locationDetailId?: IntFieldUpdateOperationsInput | number
+    locationDetailId?: NullableIntFieldUpdateOperationsInput | number | null
     heldBy?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
     promotions?: PromotionUncheckedUpdateManyWithoutEventNestedInput
@@ -16446,7 +16463,7 @@ export namespace Prisma {
     organiserId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locationDetailId?: IntFieldUpdateOperationsInput | number
+    locationDetailId?: NullableIntFieldUpdateOperationsInput | number | null
     heldBy?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
   }

@@ -89,8 +89,8 @@ export class EventsController {
       location,
       organiserId,
       heldBy,
-      categoryId,
-      locationDetailId,
+      // categoryId,
+      // locationDetailId,
     } = req.body;
 
     if (
@@ -99,9 +99,9 @@ export class EventsController {
       !time ||
       !location ||
       !organiserId ||
-      !heldBy ||
-      !categoryId ||
-      !locationDetailId
+      !heldBy
+      // !categoryId ||
+      // !locationDetailId
     ) {
       return res.status(400).json({ error: "Missing required fields" });
     }
@@ -133,8 +133,8 @@ export class EventsController {
           location,
           organiserId,
           heldBy,
-          categoryId,
-          locationDetailId,
+          // categoryId,
+          // locationDetailId,
         },
       });
 
@@ -155,8 +155,8 @@ export class EventsController {
       date,
       time,
       location,
-      categoryId,
-      locationDetailId,
+      // categoryId,
+      // locationDetailId,
     } = req.body;
 
     try {
@@ -183,8 +183,9 @@ export class EventsController {
           ...(time && { time: dateTime }),
           ...(location && { location }),
 
-          ...(categoryId && { categoryId }),
-          ...(locationDetailId && { locationDetailId }),
+          // ...(categoryId && { categoryId }),
+          // ...(locationDetailId && { locationDetailId })
+          // ,
         },
       });
 

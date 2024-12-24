@@ -31,22 +31,22 @@ model User {
 }
 
 model Event {
-  event_id         Int            @id @default(autoincrement())
-  name             String         @unique
+  event_id         Int             @id @default(autoincrement())
+  name             String          @unique
   description      String
   date             DateTime
   time             DateTime
   location         String
   organiserId      Int
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
   categoryId       Int?
-  locationDetailId Int
-  heldBy           String         @default("unknown")
+  locationDetailId Int?
+  heldBy           String          @default("unknown")
   image            String?
-  category         EventCategory? @relation("EventCategory", fields: [categoryId], references: [id])
-  locationDetail   LocationDetail @relation(fields: [locationDetailId], references: [id])
-  organiser        User           @relation("UserEvents", fields: [organiserId], references: [id])
+  category         EventCategory?  @relation("EventCategory", fields: [categoryId], references: [id])
+  locationDetail   LocationDetail? @relation(fields: [locationDetailId], references: [id])
+  organiser        User            @relation("UserEvents", fields: [organiserId], references: [id])
   promotions       Promotion[]
   reviews          Review[]
   tickets          Ticket[]
