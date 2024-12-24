@@ -119,6 +119,7 @@ export class UserController {
         fullname: findUser.fullname,
         username: findUser.username,
         email: findUser.email,
+        role: findUser.role,
         token,
       });
     } catch (error: any) {
