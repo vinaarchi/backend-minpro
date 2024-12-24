@@ -7,6 +7,8 @@ import { sendEmail } from "../utils/emailSender";
 import { compareSync } from "bcrypt";
 import { generateReferralCode } from "../utils/generateReferralCode";
 import { addReferralPoints } from "../services/point.service";
+import { transporter } from "../config/nodemailer";
+import { register } from "node:module";
 // import { createDiscountCoupon } from "../services/discount.service";
 
 export class UserController {
@@ -54,15 +56,6 @@ export class UserController {
         }
       }
 
-      const validRoles = ["CUSTOMER", "ORGANIZER"];
-      if (!validRoles.includes(req.body.role)) {
-        return ResponseHandler.error(
-          res,
-          "Invalid role selected. Please choose a valid role.",
-          400
-        );
-      }
-
       // buat pengguna baru
       const user = await prisma.user.create({
         data: {
@@ -70,7 +63,6 @@ export class UserController {
           password: newPassword,
           referralCode: referralCode,
           referredById: referredById,
-          role: req.body.role,
         },
       });
 
@@ -79,6 +71,11 @@ export class UserController {
         process.env.TOKEN_KEY || "secret",
         { expiresIn: "1h" }
       );
+
+      await sendEmail(req.body.email, "Registration Info", "register.hbs", {
+        username: req.body.username,
+        link: `${process.env.FE_URL}/verify?a_t=${token}`,
+      });
 
       return ResponseHandler.success(
         res,
@@ -122,6 +119,7 @@ export class UserController {
         fullname: findUser.fullname,
         username: findUser.username,
         email: findUser.email,
+        role: findUser.role,
         token,
       });
     } catch (error: any) {
@@ -135,16 +133,12 @@ export class UserController {
     }
   }
 
-  async keepLogin(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<any> {
+  async keepLogin(req: Request, res: Response): Promise<any> {
     try {
       // data dari middleware
       console.log("at keepLogin controller", res.locals.decript);
       const findUser = await prisma.user.findUnique({
-        where: { id: res.locals.decript.id },
+        where: { id: res.locals.decript.id }, 
       });
 
       if (!findUser) {
@@ -159,6 +153,7 @@ export class UserController {
         fullname: findUser.fullname,
         username: findUser.username,
         email: findUser.email,
+        role: findUser.role,
         token,
       });
     } catch (error: any) {

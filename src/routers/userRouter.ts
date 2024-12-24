@@ -15,14 +15,22 @@ export class UserRouter {
   private initializeRoutes(): void {
     this.route.post("/sign-up", regisValidation, this.userController.register);
     this.route.post("/sign-in", this.userController.signIn);
-    this.route.get("/keep-login", this.userController.keepLogin);
-    this.route.patch("/verify", verifyToken, this.userController.verifyUser);
+    this.route.get("/keep-login", verifyToken, this.userController.keepLogin);
+    this.route.patch(
+      "/verify-account",
+      verifyToken,
+      this.userController.verifyUser
+    );
     this.route.get("/:id", this.userController.getUserById);
     this.route.patch("/:id", this.userController.updateUser);
     this.route.delete("/:id", this.userController.deleteUser);
 
-    this.route.post("/forgot-password", this.userController.forgotPassword)
-    this.route.patch("/reset-password", verifyToken, this.userController.resetPassword)
+    this.route.post("/forgot-password", this.userController.forgotPassword);
+    this.route.patch(
+      "/reset-password",
+      verifyToken,
+      this.userController.resetPassword
+    );
   }
 
   public getRouter(): Router {
