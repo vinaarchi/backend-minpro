@@ -15,8 +15,8 @@ export class EventCategoryRouter {
     this.route.get("/", (req, res) =>
       this.eventCategoryController.getAllCategories(req, res)
     );
-    this.route.get("/:id", (req, res) =>
-      this.eventCategoryController.getCategoryById(req, res)
+    this.route.get("/topics", (req, res) =>
+      this.eventCategoryController.getAllTopics(req, res)
     );
     this.route.post("/", (req, res) =>
       this.eventCategoryController.createCategory(req, res)
@@ -26,6 +26,9 @@ export class EventCategoryRouter {
     );
     this.route.delete("/:id", (req, res) =>
       this.eventCategoryController.deleteCategory(req, res)
+    );
+    this.route.get("/formats", (req, res) =>
+      this.eventCategoryController.getAllFormats(req, res)
     );
   }
 

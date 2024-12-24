@@ -11,7 +11,9 @@ datasource db {
 
 model User {
   id              Int              @id @default(autoincrement())
-  username        String           
+
+  username        String
+
   fullname        String
   email           String           @unique
   password        String
@@ -31,22 +33,22 @@ model User {
 }
 
 model Event {
-  event_id         Int            @id @default(autoincrement())
-  image            String?
-  name             String
+  event_id         Int             @id @default(autoincrement())
+  name             String          @unique
   description      String
   date             DateTime
   time             DateTime
   location         String
   organiserId      Int
-  heldBy           String         @default("unknown")
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
-  categoryId       Int
-  locationDetailId Int
-  category         EventCategory  @relation("EventCategoryEvents", fields: [categoryId], references: [id])
-  locationDetail   LocationDetail @relation(fields: [locationDetailId], references: [id])
-  organiser        User           @relation("UserEvents", fields: [organiserId], references: [id])
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  categoryId       Int?
+  locationDetailId Int?
+  heldBy           String          @default("unknown")
+  image            String?
+  category         EventCategory?  @relation("EventCategory", fields: [categoryId], references: [id])
+  locationDetail   LocationDetail? @relation(fields: [locationDetailId], references: [id])
+  organiser        User            @relation("UserEvents", fields: [organiserId], references: [id])
   promotions       Promotion[]
   reviews          Review[]
   tickets          Ticket[]
@@ -54,11 +56,11 @@ model Event {
 
 model EventCategory {
   id        Int      @id @default(autoincrement())
-  topic     Topic    @default(LAINNYA)
-  format    Format   @default(LAINNYA)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  events    Event[]  @relation("EventCategoryEvents")
+  format    String   @default("Lainnya")
+  topic     String   @default("Lainnya")
+  events    Event[]  @relation("EventCategory")
 }
 
 model LocationDetail {
@@ -86,19 +88,20 @@ model Review {
 model Ticket {
   ticket_id     Int      @id @default(autoincrement())
   eventId       Int
-  isPaid        Boolean
-  ticketName    String
-  description   String
   price         Int?
-  contactName   String
-  contactEmail  String
-  contactNumber String
-  startDate     DateTime
-  expiredDate   DateTime
   available     Int
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  event         Event    @relation(fields: [eventId], references: [event_id])
+  contactEmail  String
+  contactName   String
+  contactNumber String
+  description   String
+  expiredDate   DateTime
+  type          String   @default("paid")
+
+  startDate  DateTime
+  ticketName String
+  event      Event    @relation(fields: [eventId], references: [event_id])
 }
 
 model Promotion {
@@ -142,60 +145,7 @@ enum Role {
   ORGANIZER
 }
 
-enum TicketType {
-  REGULAR
-  VIP
-}
-
 enum PromotionType {
   PERCENTAGE
   FLAT
-}
-
-enum Format {
-  FESTIVAL
-  KONSER
-  PERTANDINGAN
-  EXHIBITION
-  KONFERENSI
-  WORKSHOP
-  PERTUNJUKAN
-  ATRAKSI
-  THEME_PARK
-  AKOMODASI
-  SEMINAR
-  SOCIAL_GATHERING
-  TRAINING
-  SCHOOL_EVENT
-  TRIP
-  LAINNYA
-}
-
-enum Topic {
-  ANAK_KELUARGA
-  BISNIS
-  DESAIN
-  FASHION_BEAUTY
-  FILM
-  GAME
-  HOBI
-  INVESTASI
-  KARIR
-  KEAGAMAAN
-  KESEHATAN
-  KEUANGAN
-  LINGKUNGAN
-  MAKANAN_MINUMAN
-  MARKETING
-  MUSIK
-  OLAHRAGA
-  OTOMOTIF
-  SAINS_TEKNOLOGI
-  SENI_BUDAYA
-  SOSHUMPOL
-  STANDUP_KOMEDI
-  PENDIDIKAN
-  TECH_STARTUP
-  WISATA
-  LAINNYA
 }
