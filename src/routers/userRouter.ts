@@ -15,8 +15,7 @@ export class UserRouter {
   private initializeRoutes(): void {
     this.route.post("/sign-up", regisValidation, this.userController.register);
     this.route.post("/sign-in", this.userController.signIn);
-    this.route.get("/keep-login", this.userController.keepLogin);
-    this.route.patch("/:id/switch-role", this.userController.switchRole);
+    this.route.get("/keep-login", verifyToken, this.userController.keepLogin);
     this.route.patch(
       "/verify-account",
       verifyToken,
