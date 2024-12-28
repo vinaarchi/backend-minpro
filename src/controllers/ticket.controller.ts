@@ -3,6 +3,55 @@ import { prisma } from "../config/prisma";
 
 export class TicketController {
   //create ticket
+  // async addTicket(req: Request, res: Response): Promise<any> {
+  //   const {
+  //     eventId,
+  //     type,
+  //     ticketName,
+  //     description,
+  //     price,
+  //     contactName,
+  //     contactEmail,
+  //     contactNumber,
+  //     startDate,
+  //     expiredDate,
+  //     available,
+  //   } = req.body;
+
+  //   if (!eventId || !type || !price || available === undefined) {
+  //     return res.status(400).json({ error: "Missing required fields" });
+  //   }
+
+  //   try {
+  //     const event = await prisma.event.findUnique({
+  //       where: { event_id: eventId },
+  //     });
+
+  //     if (!event) {
+  //       return res.status(404).json({ error: "Event not found" });
+  //     }
+  //     const ticket = await prisma.ticket.create({
+  //       data: {
+  //         eventId,
+  //         type,
+  //         ticketName,
+  //         description,
+  //         price,
+  //         contactName,
+  //         contactEmail,
+  //         contactNumber,
+  //         startDate,
+  //         expiredDate,
+  //         available,
+  //       },
+  //     });
+
+  //     res.status(201).json(ticket);
+  //   } catch (error) {
+  //     console.error(error);
+  //     res.status(500).json({ error: "Failed to add ticket" });
+  //   }
+  // }
   async addTicket(req: Request, res: Response): Promise<any> {
     const {
       eventId,
@@ -18,8 +67,14 @@ export class TicketController {
       available,
     } = req.body;
 
-    if (!eventId || !type || !price || available === undefined) {
+    if (!eventId || !type || available === undefined) {
       return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    if (type === "paid" && price === null) {
+      return res
+        .status(400)
+        .json({ error: "Price is required for paid tickets" });
     }
 
     try {
@@ -30,13 +85,14 @@ export class TicketController {
       if (!event) {
         return res.status(404).json({ error: "Event not found" });
       }
+
       const ticket = await prisma.ticket.create({
         data: {
           eventId,
           type,
           ticketName,
           description,
-          price,
+          price: type === "free" ? null : price,
           contactName,
           contactEmail,
           contactNumber,
@@ -52,7 +108,6 @@ export class TicketController {
       res.status(500).json({ error: "Failed to add ticket" });
     }
   }
-
   //get all tickets
   async getTicketsForEvent(req: Request, res: Response): Promise<any> {
     const eventId = parseInt(req.params.eventId);
@@ -126,6 +181,25 @@ export class TicketController {
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Failed to delete ticket" });
+    }
+  }
+
+  async getTicketById(req: Request, res: Response): Promise<any> {
+    const ticketId = parseInt(req.params.id);
+
+    try {
+      const ticket = await prisma.ticket.findUnique({
+        where: { ticket_id: ticketId },
+      });
+
+      if (!ticket) {
+        return res.status(404).json({ error: "Ticket not found" });
+      }
+
+      res.json(ticket);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Failed to fetch ticket details" });
     }
   }
 }
