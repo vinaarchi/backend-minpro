@@ -219,4 +219,57 @@ export class EventsController {
       res.status(500).json({ error: "Failed to delete event" });
     }
   }
+  async getTicketsByEvent(req: Request, res: Response): Promise<any> {
+    const { eventId } = req.params;
+    try {
+      const tickets = await prisma.ticket.findMany({
+        where: {
+          eventId: parseInt(eventId),
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          event: {
+            select: {
+              name: true,
+              date: true,
+              time: true,
+              location: true,
+            },
+          },
+        },
+      });
+
+      if (!tickets) {
+        return res
+          .status(404)
+          .json({ error: "No tickets found for this event" });
+      }
+
+      res.json(tickets);
+    } catch (error) {
+      console.error("Error fetching tickets:", error);
+      res.status(500).json({ error: "Failed to fetch tickets" });
+    }
+  }
+
+  // async getTicketsForEvent(req: Request, res: Response): Promise<any> {
+  //   const eventId = parseInt(req.params.id);
+
+  //   if (isNaN(eventId)) {
+  //     return res.status(400).json({ error: "Invalid event ID" });
+  //   }
+
+  //   try {
+  //     const tickets = await prisma.ticket.findMany({
+  //       where: { eventId },
+  //     });
+
+  //     res.json(tickets);
+  //   } catch (error) {
+  //     console.error("Error fetching tickets:", error);
+  //     res.status(500).json({ error: "Failed to fetch tickets" });
+  //   }
+  // }
 }
