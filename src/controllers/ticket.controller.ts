@@ -2,56 +2,6 @@ import { Request, Response } from "express";
 import { prisma } from "../config/prisma";
 
 export class TicketController {
-  //create ticket
-  // async addTicket(req: Request, res: Response): Promise<any> {
-  //   const {
-  //     eventId,
-  //     type,
-  //     ticketName,
-  //     description,
-  //     price,
-  //     contactName,
-  //     contactEmail,
-  //     contactNumber,
-  //     startDate,
-  //     expiredDate,
-  //     available,
-  //   } = req.body;
-
-  //   if (!eventId || !type || !price || available === undefined) {
-  //     return res.status(400).json({ error: "Missing required fields" });
-  //   }
-
-  //   try {
-  //     const event = await prisma.event.findUnique({
-  //       where: { event_id: eventId },
-  //     });
-
-  //     if (!event) {
-  //       return res.status(404).json({ error: "Event not found" });
-  //     }
-  //     const ticket = await prisma.ticket.create({
-  //       data: {
-  //         eventId,
-  //         type,
-  //         ticketName,
-  //         description,
-  //         price,
-  //         contactName,
-  //         contactEmail,
-  //         contactNumber,
-  //         startDate,
-  //         expiredDate,
-  //         available,
-  //       },
-  //     });
-
-  //     res.status(201).json(ticket);
-  //   } catch (error) {
-  //     console.error(error);
-  //     res.status(500).json({ error: "Failed to add ticket" });
-  //   }
-  // }
   async addTicket(req: Request, res: Response): Promise<any> {
     const {
       eventId,
@@ -131,10 +81,20 @@ export class TicketController {
     }
   }
 
-  //update ticket
   async updateTicket(req: Request, res: Response): Promise<any> {
     const ticketId = parseInt(req.params.id);
-    const { ticketType, price, available } = req.body;
+    const {
+      ticketName,
+      description,
+      type,
+      price,
+      available,
+      startDate,
+      expiredDate,
+      contactName,
+      contactEmail,
+      contactNumber,
+    } = req.body;
 
     try {
       const ticket = await prisma.ticket.findUnique({
@@ -144,12 +104,20 @@ export class TicketController {
       if (!ticket) {
         return res.status(404).json({ error: "Ticket not found" });
       }
+
       const updatedTicket = await prisma.ticket.update({
         where: { ticket_id: ticketId },
         data: {
-          ...(ticketType !== undefined && { ticketType }),
+          ...(ticketName && { ticketName }),
+          ...(description && { description }),
+          ...(type && { type }),
           ...(price !== undefined && { price }),
           ...(available !== undefined && { available }),
+          ...(startDate && { startDate: new Date(startDate) }),
+          ...(expiredDate && { expiredDate: new Date(expiredDate) }),
+          ...(contactName && { contactName }),
+          ...(contactEmail && { contactEmail }),
+          ...(contactNumber && { contactNumber }),
         },
       });
 
