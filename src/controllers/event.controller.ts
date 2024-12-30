@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { prisma } from "../config/prisma";
-
+import { Prisma } from "@prisma/client";
 //pagination
 const paginate = (page: number, limit: number) => ({
   skip: (page - 1) * limit,
@@ -8,24 +8,70 @@ const paginate = (page: number, limit: number) => ({
 });
 
 export class EventsController {
-  //get all events
   async getEvents(req: Request, res: Response): Promise<any> {
     try {
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
       const search = (req.query.search as string) || "";
       const location = (req.query.location as string) || "";
+      const topic = req.query.topic as string;
 
-      const pagination = paginate(page, limit);
+      console.log("Received query params:", {
+        page,
+        limit,
+        search,
+        location,
+        topic,
+      });
+
+      const conditions: Prisma.EventWhereInput[] = [];
+
+      if (search) {
+        conditions.push({
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        });
+      }
+
+      if (location) {
+        conditions.push({
+          location: {
+            contains: location,
+            mode: "insensitive",
+          },
+        });
+      }
+
+      if (topic) {
+        const categoryIds = await prisma.eventCategory.findMany({
+          where: {
+            topic: { equals: topic },
+          },
+          select: { id: true },
+        });
+
+        console.log("Found category IDs for topic:", categoryIds);
+
+        conditions.push({
+          categoryId: {
+            in: categoryIds.map((c) => c.id),
+          },
+        });
+      }
+
+      const whereConditions: Prisma.EventWhereInput =
+        conditions.length > 0 ? { AND: conditions } : {};
+
+      console.log(
+        "Final where conditions:",
+        JSON.stringify(whereConditions, null, 2)
+      );
 
       const events = await prisma.event.findMany({
-        where: {
-          AND: [
-            { name: { contains: search, mode: "insensitive" } },
-            { location: { contains: location, mode: "insensitive" } },
-          ],
-        },
-        ...pagination,
+        where: whereConditions,
+        ...paginate(page, limit),
         orderBy: { date: "asc" },
         include: {
           locationDetail: true,
@@ -33,13 +79,10 @@ export class EventsController {
         },
       });
 
+      console.log("Found events:", events.length);
+
       const totalEvents = await prisma.event.count({
-        where: {
-          AND: [
-            { name: { contains: search, mode: "insensitive" } },
-            { location: { contains: location, mode: "insensitive" } },
-          ],
-        },
+        where: whereConditions,
       });
 
       res.json({
@@ -48,7 +91,7 @@ export class EventsController {
         totalPages: Math.ceil(totalEvents / limit),
       });
     } catch (error) {
-      console.error(error);
+      console.error("Error in getEvents:", error);
       res.status(500).json({ error: "Something went wrong" });
     }
   }
@@ -78,10 +121,8 @@ export class EventsController {
     }
   }
 
-  //create event
   async createEvent(req: Request, res: Response): Promise<any> {
     const {
-      image,
       name,
       description,
       date,
@@ -89,39 +130,49 @@ export class EventsController {
       location,
       organiserId,
       heldBy,
-      // categoryId,
-      // locationDetailId,
+      category,
     } = req.body;
 
-    if (
-      !name ||
-      !date ||
-      !time ||
-      !location ||
-      !organiserId ||
-      !heldBy
-      // !categoryId ||
-      // !locationDetailId
-    ) {
-      return res.status(400).json({ error: "Missing required fields" });
-    }
-
     try {
-      const organiser = await prisma.user.findUnique({
-        where: { id: organiserId },
+      if (
+        !name ||
+        !description ||
+        !date ||
+        !time ||
+        !location ||
+        !organiserId ||
+        !heldBy ||
+        !category?.topic ||
+        !category?.format
+      ) {
+        return res.status(400).json({
+          error: "Missing required fields",
+          received: {
+            name,
+            description,
+            date,
+            time,
+            location,
+            organiserId,
+            heldBy,
+            category,
+          },
+        });
+      }
+
+      let eventCategory = await prisma.eventCategory.findFirst({
+        where: {
+          AND: [{ topic: category.topic }, { format: category.format }],
+        },
       });
 
-      if (!organiser) {
-        return res.status(400).json({ error: "Organiser not found" });
-      }
-
-      if (organiser.role !== "ORGANIZER") {
-        return res.status(403).json({ error: "User is not an organizer" });
-      }
-
-      const dateTime = new Date(`${date}T${time}.000Z`);
-      if (isNaN(dateTime.getTime())) {
-        return res.status(400).json({ error: "Invalid date or time format" });
+      if (!eventCategory) {
+        eventCategory = await prisma.eventCategory.create({
+          data: {
+            topic: category.topic,
+            format: category.format,
+          },
+        });
       }
 
       const event = await prisma.event.create({
@@ -129,22 +180,23 @@ export class EventsController {
           name,
           description,
           date: new Date(date),
-          time: dateTime,
+          time: new Date(`${date}T${time}`),
           location,
           organiserId,
           heldBy,
-          // categoryId,
-          // locationDetailId,
+          categoryId: eventCategory.id,
+        },
+        include: {
+          category: true,
         },
       });
 
       res.status(201).json(event);
     } catch (error) {
-      console.error(error);
+      console.error("Error creating event:", error);
       res.status(500).json({ error: "Failed to create event" });
     }
   }
-
   //update event
   async updateEvent(req: Request, res: Response): Promise<any> {
     const eventId = parseInt(req.params.id);
@@ -253,23 +305,4 @@ export class EventsController {
       res.status(500).json({ error: "Failed to fetch tickets" });
     }
   }
-
-  // async getTicketsForEvent(req: Request, res: Response): Promise<any> {
-  //   const eventId = parseInt(req.params.id);
-
-  //   if (isNaN(eventId)) {
-  //     return res.status(400).json({ error: "Invalid event ID" });
-  //   }
-
-  //   try {
-  //     const tickets = await prisma.ticket.findMany({
-  //       where: { eventId },
-  //     });
-
-  //     res.json(tickets);
-  //   } catch (error) {
-  //     console.error("Error fetching tickets:", error);
-  //     res.status(500).json({ error: "Failed to fetch tickets" });
-  //   }
-  // }
 }
