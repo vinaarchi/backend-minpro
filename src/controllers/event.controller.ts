@@ -6,6 +6,16 @@ const paginate = (page: number, limit: number) => ({
   skip: (page - 1) * limit,
   take: limit,
 });
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        id: number;
+        role: string;
+      };
+    }
+  }
+}
 
 export class EventsController {
   async getEvents(req: Request, res: Response): Promise<any> {
@@ -121,26 +131,100 @@ export class EventsController {
     }
   }
 
+  // async createEvent(req: Request, res: Response): Promise<any> {
+  //   const {
+  //     name,
+  //     description,
+  //     date,
+  //     time,
+  //     location,
+  //     organiserId,
+  //     heldBy,
+  //     category,
+  //   } = req.body;
+
+  //   try {
+  //     if (
+  //       !name ||
+  //       !description ||
+  //       !date ||
+  //       !time ||
+  //       !location ||
+  //       !organiserId ||
+  //       !heldBy ||
+  //       !category?.topic ||
+  //       !category?.format
+  //     ) {
+  //       return res.status(400).json({
+  //         error: "Missing required fields",
+  //         received: {
+  //           name,
+  //           description,
+  //           date,
+  //           time,
+  //           location,
+  //           organiserId,
+  //           heldBy,
+  //           category,
+  //         },
+  //       });
+  //     }
+
+  //     let eventCategory = await prisma.eventCategory.findFirst({
+  //       where: {
+  //         AND: [{ topic: category.topic }, { format: category.format }],
+  //       },
+  //     });
+
+  //     if (!eventCategory) {
+  //       eventCategory = await prisma.eventCategory.create({
+  //         data: {
+  //           topic: category.topic,
+  //           format: category.format,
+  //         },
+  //       });
+  //     }
+
+  //     const event = await prisma.event.create({
+  //       data: {
+  //         name,
+  //         description,
+  //         date: new Date(date),
+  //         time: new Date(`${date}T${time}`),
+  //         location,
+  //         organiserId,
+  //         heldBy,
+  //         categoryId: eventCategory.id,
+  //       },
+  //       include: {
+  //         category: true,
+  //       },
+  //     });
+
+  //     res.status(201).json(event);
+  //   } catch (error) {
+  //     console.error("Error creating event:", error);
+  //     res.status(500).json({ error: "Failed to create event" });
+  //   }
+  // }
+  //create evenr
   async createEvent(req: Request, res: Response): Promise<any> {
-    const {
-      name,
-      description,
-      date,
-      time,
-      location,
-      organiserId,
-      heldBy,
-      category,
-    } = req.body;
+    const { name, description, date, time, location, heldBy, category } =
+      req.body;
 
     try {
+      const organiserId = req.user?.id;
+
+      if (!organiserId) {
+        return res.status(401).json({ error: "User not authenticated" });
+      }
+
       if (
         !name ||
         !description ||
         !date ||
         !time ||
         !location ||
-        !organiserId ||
         !heldBy ||
         !category?.topic ||
         !category?.format
@@ -153,11 +237,20 @@ export class EventsController {
             date,
             time,
             location,
-            organiserId,
             heldBy,
             category,
           },
         });
+      }
+
+      const user = await prisma.user.findUnique({
+        where: { id: organiserId },
+      });
+
+      if (!user || user.role !== "ORGANIZER") {
+        return res
+          .status(403)
+          .json({ error: "User must be an organizer to create events" });
       }
 
       let eventCategory = await prisma.eventCategory.findFirst({
@@ -188,15 +281,16 @@ export class EventsController {
         },
         include: {
           category: true,
+          organiser: true,
         },
       });
 
       res.status(201).json(event);
     } catch (error) {
       console.error("Error creating event:", error);
-      res.status(500).json({ error: "Failed to create event" });
     }
   }
+
   //update event
   async updateEvent(req: Request, res: Response): Promise<any> {
     const eventId = parseInt(req.params.id);
