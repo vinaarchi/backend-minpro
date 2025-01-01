@@ -358,8 +358,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.0.1
-   * Query Engine version: 5dbef10bdbfb579e07d35cc85fb1518d357cb99e
+   * Prisma Client JS version: 6.1.0
+   * Query Engine version: 11f085a2012c0f4778414c8db2651556ee0ef959
    */
   export type PrismaVersion = {
     client: string
@@ -1764,6 +1764,9 @@ export namespace Prisma {
     fullname: string | null
     email: string | null
     password: string | null
+    phone: string | null
+    birthDate: Date | null
+    gender: string | null
     imgProfile: string | null
     isVerified: boolean | null
     role: $Enums.Role | null
@@ -1779,6 +1782,9 @@ export namespace Prisma {
     fullname: string | null
     email: string | null
     password: string | null
+    phone: string | null
+    birthDate: Date | null
+    gender: string | null
     imgProfile: string | null
     isVerified: boolean | null
     role: $Enums.Role | null
@@ -1794,6 +1800,9 @@ export namespace Prisma {
     fullname: number
     email: number
     password: number
+    phone: number
+    birthDate: number
+    gender: number
     imgProfile: number
     isVerified: number
     role: number
@@ -1821,6 +1830,9 @@ export namespace Prisma {
     fullname?: true
     email?: true
     password?: true
+    phone?: true
+    birthDate?: true
+    gender?: true
     imgProfile?: true
     isVerified?: true
     role?: true
@@ -1836,6 +1848,9 @@ export namespace Prisma {
     fullname?: true
     email?: true
     password?: true
+    phone?: true
+    birthDate?: true
+    gender?: true
     imgProfile?: true
     isVerified?: true
     role?: true
@@ -1851,6 +1866,9 @@ export namespace Prisma {
     fullname?: true
     email?: true
     password?: true
+    phone?: true
+    birthDate?: true
+    gender?: true
     imgProfile?: true
     isVerified?: true
     role?: true
@@ -1953,6 +1971,9 @@ export namespace Prisma {
     fullname: string
     email: string
     password: string
+    phone: string
+    birthDate: Date
+    gender: string
     imgProfile: string | null
     isVerified: boolean
     role: $Enums.Role
@@ -1987,6 +2008,9 @@ export namespace Prisma {
     fullname?: boolean
     email?: boolean
     password?: boolean
+    phone?: boolean
+    birthDate?: boolean
+    gender?: boolean
     imgProfile?: boolean
     isVerified?: boolean
     role?: boolean
@@ -2009,6 +2033,9 @@ export namespace Prisma {
     fullname?: boolean
     email?: boolean
     password?: boolean
+    phone?: boolean
+    birthDate?: boolean
+    gender?: boolean
     imgProfile?: boolean
     isVerified?: boolean
     role?: boolean
@@ -2025,6 +2052,9 @@ export namespace Prisma {
     fullname?: boolean
     email?: boolean
     password?: boolean
+    phone?: boolean
+    birthDate?: boolean
+    gender?: boolean
     imgProfile?: boolean
     isVerified?: boolean
     role?: boolean
@@ -2063,6 +2093,9 @@ export namespace Prisma {
       fullname: string
       email: string
       password: string
+      phone: string
+      birthDate: Date
+      gender: string
       imgProfile: string | null
       isVerified: boolean
       role: $Enums.Role
@@ -2474,6 +2507,9 @@ export namespace Prisma {
     readonly fullname: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
+    readonly phone: FieldRef<"User", 'String'>
+    readonly birthDate: FieldRef<"User", 'DateTime'>
+    readonly gender: FieldRef<"User", 'String'>
     readonly imgProfile: FieldRef<"User", 'String'>
     readonly isVerified: FieldRef<"User", 'Boolean'>
     readonly role: FieldRef<"User", 'Role'>
@@ -11252,6 +11288,9 @@ export namespace Prisma {
     fullname: 'fullname',
     email: 'email',
     password: 'password',
+    phone: 'phone',
+    birthDate: 'birthDate',
+    gender: 'gender',
     imgProfile: 'imgProfile',
     isVerified: 'isVerified',
     role: 'role',
@@ -11439,6 +11478,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'DateTime'
+   */
+  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime[]'
+   */
+  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -11456,20 +11509,6 @@ export namespace Prisma {
    * Reference to a field of type 'Role[]'
    */
   export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'DateTime'
-   */
-  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
-
-
-  /**
-   * Reference to a field of type 'DateTime[]'
-   */
-  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
     
 
 
@@ -11513,6 +11552,9 @@ export namespace Prisma {
     fullname?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
+    phone?: StringFilter<"User"> | string
+    birthDate?: DateTimeFilter<"User"> | Date | string
+    gender?: StringFilter<"User"> | string
     imgProfile?: StringNullableFilter<"User"> | string | null
     isVerified?: BoolFilter<"User"> | boolean
     role?: EnumRoleFilter<"User"> | $Enums.Role
@@ -11534,6 +11576,9 @@ export namespace Prisma {
     fullname?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    phone?: SortOrder
+    birthDate?: SortOrder
+    gender?: SortOrder
     imgProfile?: SortOrderInput | SortOrder
     isVerified?: SortOrder
     role?: SortOrder
@@ -11559,6 +11604,9 @@ export namespace Prisma {
     username?: StringFilter<"User"> | string
     fullname?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
+    phone?: StringFilter<"User"> | string
+    birthDate?: DateTimeFilter<"User"> | Date | string
+    gender?: StringFilter<"User"> | string
     imgProfile?: StringNullableFilter<"User"> | string | null
     isVerified?: BoolFilter<"User"> | boolean
     role?: EnumRoleFilter<"User"> | $Enums.Role
@@ -11579,6 +11627,9 @@ export namespace Prisma {
     fullname?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    phone?: SortOrder
+    birthDate?: SortOrder
+    gender?: SortOrder
     imgProfile?: SortOrderInput | SortOrder
     isVerified?: SortOrder
     role?: SortOrder
@@ -11602,6 +11653,9 @@ export namespace Prisma {
     fullname?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
+    phone?: StringWithAggregatesFilter<"User"> | string
+    birthDate?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    gender?: StringWithAggregatesFilter<"User"> | string
     imgProfile?: StringNullableWithAggregatesFilter<"User"> | string | null
     isVerified?: BoolWithAggregatesFilter<"User"> | boolean
     role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
@@ -12235,6 +12289,9 @@ export namespace Prisma {
     fullname: string
     email: string
     password: string
+    phone: string
+    birthDate: Date | string
+    gender: string
     imgProfile?: string | null
     isVerified?: boolean
     role?: $Enums.Role
@@ -12255,6 +12312,9 @@ export namespace Prisma {
     fullname: string
     email: string
     password: string
+    phone: string
+    birthDate: Date | string
+    gender: string
     imgProfile?: string | null
     isVerified?: boolean
     role?: $Enums.Role
@@ -12274,6 +12334,9 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    birthDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
     imgProfile?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -12294,6 +12357,9 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    birthDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
     imgProfile?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -12314,6 +12380,9 @@ export namespace Prisma {
     fullname: string
     email: string
     password: string
+    phone: string
+    birthDate: Date | string
+    gender: string
     imgProfile?: string | null
     isVerified?: boolean
     role?: $Enums.Role
@@ -12328,6 +12397,9 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    birthDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
     imgProfile?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -12342,6 +12414,9 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    birthDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
     imgProfile?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -13015,6 +13090,17 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -13040,17 +13126,6 @@ export namespace Prisma {
     in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
     notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
-  }
-
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
   export type IntNullableFilter<$PrismaModel = never> = {
@@ -13130,6 +13205,9 @@ export namespace Prisma {
     fullname?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    phone?: SortOrder
+    birthDate?: SortOrder
+    gender?: SortOrder
     imgProfile?: SortOrder
     isVerified?: SortOrder
     role?: SortOrder
@@ -13150,6 +13228,9 @@ export namespace Prisma {
     fullname?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    phone?: SortOrder
+    birthDate?: SortOrder
+    gender?: SortOrder
     imgProfile?: SortOrder
     isVerified?: SortOrder
     role?: SortOrder
@@ -13165,6 +13246,9 @@ export namespace Prisma {
     fullname?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    phone?: SortOrder
+    birthDate?: SortOrder
+    gender?: SortOrder
     imgProfile?: SortOrder
     isVerified?: SortOrder
     role?: SortOrder
@@ -13213,6 +13297,20 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -13247,20 +13345,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
-  }
-
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -13818,6 +13902,10 @@ export namespace Prisma {
     set?: string
   }
 
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
+  }
+
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
   }
@@ -13828,10 +13916,6 @@ export namespace Prisma {
 
   export type EnumRoleFieldUpdateOperationsInput = {
     set?: $Enums.Role
-  }
-
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
   }
 
   export type DiscountCouponUpdateManyWithoutUserNestedInput = {
@@ -14373,6 +14457,17 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -14397,17 +14492,6 @@ export namespace Prisma {
     in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
     notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
-  }
-
-  export type NestedDateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
   export type NestedIntNullableFilter<$PrismaModel = never> = {
@@ -14465,6 +14549,20 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -14498,20 +14596,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -14712,6 +14796,9 @@ export namespace Prisma {
     fullname: string
     email: string
     password: string
+    phone: string
+    birthDate: Date | string
+    gender: string
     imgProfile?: string | null
     isVerified?: boolean
     role?: $Enums.Role
@@ -14731,6 +14818,9 @@ export namespace Prisma {
     fullname: string
     email: string
     password: string
+    phone: string
+    birthDate: Date | string
+    gender: string
     imgProfile?: string | null
     isVerified?: boolean
     role?: $Enums.Role
@@ -14754,6 +14844,9 @@ export namespace Prisma {
     fullname: string
     email: string
     password: string
+    phone: string
+    birthDate: Date | string
+    gender: string
     imgProfile?: string | null
     isVerified?: boolean
     role?: $Enums.Role
@@ -14773,6 +14866,9 @@ export namespace Prisma {
     fullname: string
     email: string
     password: string
+    phone: string
+    birthDate: Date | string
+    gender: string
     imgProfile?: string | null
     isVerified?: boolean
     role?: $Enums.Role
@@ -14933,6 +15029,9 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    birthDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
     imgProfile?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -14952,6 +15051,9 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    birthDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
     imgProfile?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -14990,6 +15092,9 @@ export namespace Prisma {
     fullname?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
+    phone?: StringFilter<"User"> | string
+    birthDate?: DateTimeFilter<"User"> | Date | string
+    gender?: StringFilter<"User"> | string
     imgProfile?: StringNullableFilter<"User"> | string | null
     isVerified?: BoolFilter<"User"> | boolean
     role?: EnumRoleFilter<"User"> | $Enums.Role
@@ -15046,6 +15151,9 @@ export namespace Prisma {
     fullname: string
     email: string
     password: string
+    phone: string
+    birthDate: Date | string
+    gender: string
     imgProfile?: string | null
     isVerified?: boolean
     role?: $Enums.Role
@@ -15065,6 +15173,9 @@ export namespace Prisma {
     fullname: string
     email: string
     password: string
+    phone: string
+    birthDate: Date | string
+    gender: string
     imgProfile?: string | null
     isVerified?: boolean
     role?: $Enums.Role
@@ -15256,6 +15367,9 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    birthDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
     imgProfile?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -15275,6 +15389,9 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    birthDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
     imgProfile?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -15540,6 +15657,9 @@ export namespace Prisma {
     fullname: string
     email: string
     password: string
+    phone: string
+    birthDate: Date | string
+    gender: string
     imgProfile?: string | null
     isVerified?: boolean
     role?: $Enums.Role
@@ -15559,6 +15679,9 @@ export namespace Prisma {
     fullname: string
     email: string
     password: string
+    phone: string
+    birthDate: Date | string
+    gender: string
     imgProfile?: string | null
     isVerified?: boolean
     role?: $Enums.Role
@@ -15639,6 +15762,9 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    birthDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
     imgProfile?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -15658,6 +15784,9 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    birthDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
     imgProfile?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -15848,6 +15977,9 @@ export namespace Prisma {
     fullname: string
     email: string
     password: string
+    phone: string
+    birthDate: Date | string
+    gender: string
     imgProfile?: string | null
     isVerified?: boolean
     role?: $Enums.Role
@@ -15867,6 +15999,9 @@ export namespace Prisma {
     fullname: string
     email: string
     password: string
+    phone: string
+    birthDate: Date | string
+    gender: string
     imgProfile?: string | null
     isVerified?: boolean
     role?: $Enums.Role
@@ -15901,6 +16036,9 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    birthDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
     imgProfile?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -15920,6 +16058,9 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    birthDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
     imgProfile?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -15938,6 +16079,9 @@ export namespace Prisma {
     fullname: string
     email: string
     password: string
+    phone: string
+    birthDate: Date | string
+    gender: string
     imgProfile?: string | null
     isVerified?: boolean
     role?: $Enums.Role
@@ -15957,6 +16101,9 @@ export namespace Prisma {
     fullname: string
     email: string
     password: string
+    phone: string
+    birthDate: Date | string
+    gender: string
     imgProfile?: string | null
     isVerified?: boolean
     role?: $Enums.Role
@@ -15991,6 +16138,9 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    birthDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
     imgProfile?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -16010,6 +16160,9 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    birthDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
     imgProfile?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -16070,6 +16223,9 @@ export namespace Prisma {
     fullname: string
     email: string
     password: string
+    phone: string
+    birthDate: Date | string
+    gender: string
     imgProfile?: string | null
     isVerified?: boolean
     role?: $Enums.Role
@@ -16208,6 +16364,9 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    birthDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
     imgProfile?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -16227,6 +16386,9 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    birthDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
     imgProfile?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -16246,6 +16408,9 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    birthDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: StringFieldUpdateOperationsInput | string
     imgProfile?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role

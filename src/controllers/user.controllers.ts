@@ -9,6 +9,7 @@ import { generateReferralCode } from "../utils/generateReferralCode";
 import { addReferralPoints } from "../services/point.service";
 import { transporter } from "../config/nodemailer";
 import { register } from "node:module";
+import { cloudinaryUpload } from "../config/cloudinary";
 // import { createDiscountCoupon } from "../services/discount.service";
 
 export class UserController {
@@ -116,6 +117,7 @@ export class UserController {
       );
 
       return res.status(200).send({
+        id: findUser.id,
         fullname: findUser.fullname,
         username: findUser.username,
         email: findUser.email,
@@ -138,7 +140,7 @@ export class UserController {
       // data dari middleware
       console.log("at keepLogin controller", res.locals.decript);
       const findUser = await prisma.user.findUnique({
-        where: { id: res.locals.decript.id }, 
+        where: { id: res.locals.decript.id },
       });
 
       if (!findUser) {
@@ -150,6 +152,7 @@ export class UserController {
         process.env.TOKEN_KEY || "test"
       );
       return res.status(200).send({
+        id: findUser.id,
         fullname: findUser.fullname,
         username: findUser.username,
         email: findUser.email,
@@ -194,7 +197,7 @@ export class UserController {
     }
   }
 
-  async updateUser(req: Request, res: Response): Promise<any> {
+  async updateProfile(req: Request, res: Response): Promise<any> {
     try {
       const userId = parseInt(req.params.id);
       const updatedData = req.body;
@@ -268,6 +271,33 @@ export class UserController {
       });
       ResponseHandler.success(res, "Your Account is verified", 201);
     } catch (error: any) {
+      next(error);
+    }
+  }
+
+  async updatePhotoProfile(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
+    try {
+      if (!req.file) {
+        throw { rc: 400, message: "File is not Uploaded" };
+      }
+
+      const { secure_url } = await cloudinaryUpload(req.file);
+      console.log("RESULT FROM MEMORY", secure_url);
+
+      const update = await prisma.user.update({
+        where: { id: parseInt(res.locals.decript.id) },
+        data: { imgProfile: `/profile/${req.file?.filename}` },
+      });
+      ResponseHandler.success(
+        res,
+        "Your Profile Picture has been updated",
+        201
+      );
+    } catch (error) {
       next(error);
     }
   }

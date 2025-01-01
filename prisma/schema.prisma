@@ -13,10 +13,12 @@ model User {
   id              Int              @id @default(autoincrement())
 
   username        String
-
   fullname        String
   email           String           @unique
   password        String
+  phone           String
+  birthDate       DateTime
+  gender          String
   imgProfile      String?
   isVerified      Boolean          @default(false)
   role            Role             @default(CUSTOMER)

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import { UserController } from "../controllers/user.controllers";
 import { regisValidation } from "../middleware/validator";
 import { verifyToken } from "../middleware/verifyToken";
+import { uploaderMemory } from "../middleware/uploader";
 
 export class UserRouter {
   private route: Router;
@@ -22,8 +23,15 @@ export class UserRouter {
       this.userController.verifyUser
     );
     this.route.get("/:id", this.userController.getUserById);
-    this.route.patch("/:id", this.userController.updateUser);
+    this.route.patch("/:id", this.userController.updateProfile);
     this.route.delete("/:id", this.userController.deleteUser);
+
+    this.route.patch(
+      "/photo-profile",
+      verifyToken,
+      uploaderMemory().single("imgProfile"),
+      this.userController.updatePhotoProfile
+    );
 
     this.route.post("/forgot-password", this.userController.forgotPassword);
     this.route.patch(
