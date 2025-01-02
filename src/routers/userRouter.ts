@@ -22,9 +22,13 @@ export class UserRouter {
       verifyToken,
       this.userController.verifyUser
     );
-    this.route.get("/:id", this.userController.getUserById);
-    this.route.patch("/:id", this.userController.updateProfile);
-    this.route.delete("/:id", this.userController.deleteUser);
+    this.route.get("/data-user/:id", this.userController.getUserById);
+    this.route.patch(
+      "/update/:id",
+      verifyToken,
+      this.userController.updateProfile
+    );
+    this.route.delete("/delete/:id", this.userController.deleteUser);
 
     this.route.patch(
       "/photo-profile",

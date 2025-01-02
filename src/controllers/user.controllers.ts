@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, response, Response } from "express";
 import { prisma } from "../config/prisma";
 import ResponseHandler from "../utils/ResponseHandler";
 import { hashPassword } from "../utils/hashPassword";
@@ -102,18 +102,19 @@ export class UserController {
       });
 
       if (!findUser) {
-        throw { rc: 404, message: "Account is not exist" };
+        return ResponseHandler.error(res, "Account is not exist", 404);
       }
 
       //Checkpassword
       const comparePass = compareSync(req.body.password, findUser.password);
       if (!comparePass) {
-        throw { rc: 401, message: "Password is Wrong" };
+        return ResponseHandler.error(res, "Password is incorrect", 400);
       }
 
       const token = sign(
         { id: findUser.id, email: findUser.email },
-        process.env.TOKEN_KEY || "test"
+        process.env.TOKEN_KEY || "test",
+        { expiresIn: "1h" }
       );
 
       return res.status(200).send({
@@ -149,8 +150,10 @@ export class UserController {
 
       const token = sign(
         { id: findUser.id, email: findUser.email },
-        process.env.TOKEN_KEY || "test"
+        process.env.TOKEN_KEY || "test",
+        { expiresIn: "1h" }
       );
+
       return res.status(200).send({
         id: findUser.id,
         fullname: findUser.fullname,
@@ -199,28 +202,31 @@ export class UserController {
 
   async updateProfile(req: Request, res: Response): Promise<any> {
     try {
-      const userId = parseInt(req.params.id);
-      const updatedData = req.body;
-
-      const user = await prisma.user.findUnique({
-        where: { id: userId },
-      });
-      if (!user) {
-        return ResponseHandler.error(res, "User not Found", 404);
-      }
-
       //Buat update data pengguna
-      const updatedUser = await prisma.user.update({
-        where: { id: userId },
-        data: updatedData,
+      const updateProfile = await prisma.user.update({
+        where: { id: res.locals.decript.id },
+        data: req.body,
       });
 
-      return ResponseHandler.success(
-        res,
-        "User Updatedd successfully",
-        200,
-        updatedUser
+      const token = sign(
+        {
+          id: updateProfile.id,
+          email: updateProfile.email,
+        },
+        process.env.TOKEN_KEY || "test",
+        { expiresIn: "1h" }
       );
+
+      return res.status(200).send({
+        id: updateProfile.id,
+        fullname: updateProfile.fullname,
+        username: updateProfile.username,
+        email: updateProfile.email,
+        phone: updateProfile.phone,
+        gender: updateProfile.gender,
+        role: updateProfile.role,
+        token,
+      });
     } catch (error: any) {
       console.log(error);
       return ResponseHandler.error(
@@ -349,22 +355,21 @@ export class UserController {
     try {
       const newPassword = await hashPassword(req.body.newPassword);
       const userId = parseInt(res.locals.decript.userId);
-      console.log({ newPassword, userId });
+      console.log("INI DARI BE RESETPASSWORD", { newPassword, userId });
 
       await prisma.user.update({
         where: { id: userId },
         data: { password: newPassword },
       });
 
-      ResponseHandler.success(
+      return ResponseHandler.success(
         res,
         "Your New Password has been Successfully Updated",
         201
       );
-    } catch (error) {
-      return res.status(500).send({
-        message: "Failed to Create New Password",
-      });
+    } catch (error: any) {
+      console.log(error);
+      return ResponseHandler.error(res, "Reset Password Failed", 500, error);
     }
   }
 }
