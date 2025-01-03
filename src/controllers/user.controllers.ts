@@ -10,8 +10,7 @@ import { addReferralPoints } from "../services/point.service";
 import { transporter } from "../config/nodemailer";
 import { register } from "node:module";
 import { cloudinaryUpload } from "../config/cloudinary";
-import { profile } from "node:console";
-// import { createDiscountCoupon } from "../services/discount.service";
+import { createDiscountCoupon } from "../services/discount.service";
 
 export class UserController {
   async register(
@@ -52,9 +51,6 @@ export class UserController {
 
           // nambahin point ke user yang punya referal (10.000 poin)
           await addReferralPoints(referralUser.id);
-
-          // // bikin kupon diskon untuk pengguna baru yang baru daftar pake referral
-          // await createDiscountCoupon(referralUser.id);
         }
       }
 
@@ -67,6 +63,11 @@ export class UserController {
           referredById: referredById,
         },
       });
+
+      if (referredById) {
+        // // bikin kupon diskon untuk pengguna baru yang baru daftar pake referral
+        await createDiscountCoupon(user.id);
+      }
 
       const token = sign(
         { id: user.id, email: user.email },
