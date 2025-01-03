@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import express, { Request, Response, NextFunction, Application } from "express";
 import cors from "cors";
+import bodyParser from "body-parser";
 import responseHandler from "./utils/ResponseHandler";
 import { UserRouter } from "./routers/userRouter";
 // import { EventRouter } from "./routers/eventRouter";
@@ -19,13 +20,21 @@ class App {
   constructor() {
     this.app = express();
     this.configure();
+    this.setupMiddleware();
     this.routes();
     this.errorHandler();
   }
 
   private configure(): void {
+    // this.app.use(cors());
+    // this.app.use(express.json());
+  }
+
+  private setupMiddleware(): void {
     this.app.use(cors());
-    this.app.use(express.json());
+    this.app.use(bodyParser.json({ limit: "50mb" }));
+    this.app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+    // this.app.use(express.json());
   }
 
   private routes(): void {
@@ -49,11 +58,12 @@ class App {
   }
 
   private errorHandler(): void {
-    (error: any, req: Request, res: Response, next: NextFunction) => {
-      responseHandler.error(res, error.message, error.error, error.rc);
-    };
+    this.app.use(
+      (error: any, req: Request, res: Response, next: NextFunction) => {
+        responseHandler.error(res, error.message, error.error, error.rc);
+      }
+    );
   }
-
   public start(): void {
     this.app.listen(PORT, () => {
       console.log("API RUNNING", PORT);
