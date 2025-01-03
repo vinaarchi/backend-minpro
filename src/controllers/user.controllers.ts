@@ -227,6 +227,9 @@ export class UserController {
         phone: updateProfile.phone,
         gender: updateProfile.gender,
         role: updateProfile.role,
+
+        imgProfile: updateProfile.imgProfile,
+
         token,
       });
     } catch (error: any) {

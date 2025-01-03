@@ -7,12 +7,13 @@ export const verifyToken = (
     try {
         console.log("from request header", req.headers)
         const token = req.headers.authorization?.split(" ")[1]
-        console.log(token)
+        console.log( "Received Token", token)
 
         if(!token){
             throw {rc: 400, status: false, message: "Token not exist"}
         }
-
+        
+        //verify Token
         const checkToken = verify(token, process.env.TOKEN_KEY || "SECRET")
         console.log("INI DARI VERIFY TOKEN", checkToken)
 

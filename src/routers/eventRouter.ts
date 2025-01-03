@@ -1,11 +1,11 @@
 import { Router, Request, Response, NextFunction } from "express";
-import express from "express";
+ import express from "express";
 import { EventsController } from "../controllers/event.controller";
 import { verifyToken } from "../middleware/verifyToken";
 
 export class EventRouter {
   private route: Router;
-  private eventController: EventsController;
+   private eventController: EventsController;
 
   constructor() {
     this.eventController = new EventsController();
@@ -22,7 +22,8 @@ export class EventRouter {
     this.route.post("/upload", this.eventController.uploadImage);
   }
 
-  public getRouter(): Router {
-    return this.route;
-  }
-}
+
+public getRouter(): Router {
+  return this.route;
+   }
+ }
