@@ -35,7 +35,7 @@ export class EventsController {
         topic,
       });
 
-      const conditions: Prisma.EventWhereInput[] = [];
+      const conditions: any = [];
 
       if (search) {
         conditions.push({
@@ -72,7 +72,7 @@ export class EventsController {
         });
       }
 
-      const whereConditions: Prisma.EventWhereInput =
+      const whereConditions: any =
         conditions.length > 0 ? { AND: conditions } : {};
 
       console.log(
