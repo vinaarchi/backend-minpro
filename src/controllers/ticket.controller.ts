@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { prisma } from "../config/prisma";
+import { isDiscountCouponValid } from "../services/discount.service";
 
 export class TicketController {
   async addTicket(req: Request, res: Response): Promise<any> {
@@ -168,6 +169,53 @@ export class TicketController {
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Failed to fetch ticket details" });
+    }
+  }
+
+  async purchaseTicket(req: Request, res: Response): Promise<any> {
+    const { ticketId, couponCode } = req.body; // ngambil ticketId dan couponCode dari request body
+
+    try {
+      const ticket = await prisma.ticket.findUnique({
+        where: { ticket_id: ticketId }, // cari tiket berdasarkan ticketId
+      })
+
+if (!ticket) {
+        return res.status(404).json({ error: "Ticket not found" });
+      }
+
+      let finalPrice = ticket.price ?? 0; // inisialisasi finalPrice dengan harga tiket
+
+      if (couponCode) {
+        const isValidCoupon = await isDiscountCouponValid(couponCode); // cek apakah kode diskon valid
+
+        if (isValidCoupon){
+          const discount = 10; // diskon 10%
+          finalPrice = finalPrice * (1 - discount / 100); // hitung jumlah yang harus dibayar
+        } else {
+          return res.status(400).json({ error: "Invalid coupon code" });
+        }
+      }
+
+      // lakukan pembayaran
+      // const transaction = await prisma.ticket.create({
+      //   data :{
+      //     ticketId: ticket.ticket_id,
+      //     userId: req.user.id,
+      //     originalPrice: ticket.price,
+      //     finalPrice: finalPrice,
+      //     status: "paid"
+      //   }
+      // })
+
+      res.status(201).send({
+        message: "Payment successful",
+        // transaction
+      })
+
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Failed to purchase ticket" });
     }
   }
 }
