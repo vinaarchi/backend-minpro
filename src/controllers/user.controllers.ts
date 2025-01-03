@@ -10,6 +10,7 @@ import { addReferralPoints } from "../services/point.service";
 import { transporter } from "../config/nodemailer";
 import { register } from "node:module";
 import { cloudinaryUpload } from "../config/cloudinary";
+import { profile } from "node:console";
 // import { createDiscountCoupon } from "../services/discount.service";
 
 export class UserController {
@@ -225,6 +226,9 @@ export class UserController {
         phone: updateProfile.phone,
         gender: updateProfile.gender,
         role: updateProfile.role,
+
+        imgProfile: updateProfile.imgProfile,
+
         token,
       });
     } catch (error: any) {
