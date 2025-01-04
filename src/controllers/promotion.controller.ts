@@ -145,4 +145,91 @@ export class PromotionController {
       res.status(500).json({ error: "Failed to delete promotion" });
     }
   }
+
+  async verifyPromotion(req: Request, res: Response): Promise<any> {
+    try {
+      const { code, eventId } = req.body;
+
+      const promotion = await prisma.promotion.findFirst({
+        where: {
+          promotionCode: code,
+          eventId: parseInt(eventId),
+          expirationDate: {
+            gt: new Date(),
+          },
+          useCount: {
+            lt: prisma.promotion.fields.maxUse,
+          },
+        },
+      });
+
+      if (!promotion) {
+        return res.status(400).json({
+          valid: false,
+          message: "Invalid or expired promotion code",
+        });
+      }
+
+      res.json({
+        valid: true,
+        promotionCode: promotion.promotionCode,
+        value: promotion.value,
+        type: promotion.type,
+      });
+    } catch (error) {
+      console.error("Promotion verification error:", error);
+      res.status(500).json({ error: "Failed to verify promotion" });
+    }
+  }
+  async checkPromoCode(req: Request, res: Response) {
+    try {
+      const { code, ticketId } = req.body;
+
+      const promotion = await prisma.promotion.findFirst({
+        where: {
+          promotionCode: code,
+          event: {
+            tickets: {
+              some: {
+                ticket_id: parseInt(ticketId),
+              },
+            },
+          },
+        },
+      });
+
+      if (!promotion) {
+        return res.status(404).json({ error: "Invalid promotion code" });
+      }
+
+      if (promotion.useCount >= promotion.maxUse) {
+        return res.status(400).json({ error: "Promotion code has expired" });
+      }
+
+      const ticket = await prisma.ticket.findUnique({
+        where: { ticket_id: parseInt(ticketId) },
+      });
+
+      if (!ticket || ticket.price === null) {
+        return res
+          .status(404)
+          .json({ error: "Ticket not found or invalid price" });
+      }
+
+      const discount =
+        promotion.type === "PERCENTAGE"
+          ? Math.floor((ticket.price * promotion.value) / 100)
+          : promotion.value;
+
+      await prisma.promotion.update({
+        where: { promotion_id: promotion.promotion_id },
+        data: { useCount: { increment: 1 } },
+      });
+
+      res.json({ discount });
+    } catch (error) {
+      console.error("Promo code check failed:", error);
+      res.status(500).json({ error: "Failed to check promo code" });
+    }
+  }
 }
