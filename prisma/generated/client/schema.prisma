@@ -31,6 +31,7 @@ model User {
   reviews         Review[]
   referredBy      User?            @relation("UserReferrals", fields: [referredById], references: [id])
   referralUsedBy  User[]           @relation("UserReferrals")
+  transactions    Transaction[]
 }
 
 model Event {
@@ -100,9 +101,10 @@ model Ticket {
   expiredDate   DateTime
   type          String   @default("paid")
 
-  startDate  DateTime
-  ticketName String
-  event      Event    @relation(fields: [eventId], references: [event_id])
+  startDate    DateTime
+  ticketName   String
+  event        Event         @relation(fields: [eventId], references: [event_id])
+  transactions Transaction[]
 }
 
 model Promotion {
@@ -139,6 +141,20 @@ model DiscountCoupon {
   updateAt       DateTime @updatedAt
   expirationDate DateTime
   user           User     @relation(fields: [userId], references: [id])
+}
+
+model Transaction {
+  id            Int      @id @default(autoincrement())
+  ticketId      Int
+  userId        Int
+  proofImage    String
+  status        String   @default("PENDING")
+  finalPrice    Int
+  promotionCode String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  ticket        Ticket   @relation(fields: [ticketId], references: [ticket_id])
+  user          User     @relation(fields: [userId], references: [id])
 }
 
 enum Role {

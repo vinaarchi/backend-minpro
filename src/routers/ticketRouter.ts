@@ -13,11 +13,11 @@ export class TicketRouter {
 
   private initializeRoutes(): void {
     this.route.post("/", this.ticketController.addTicket);
-    this.route.get("/:eventId", this.ticketController.getTicketsForEvent);
+    // this.route.get("/:eventId", this.ticketController.getTicketsForEvent);
     this.route.patch("/:id", this.ticketController.updateTicket);
     this.route.delete("/:id", this.ticketController.deleteTicket);
-
-    this.route.get("/:id", this.ticketController.getTicketById);
+    this.route.post("/purchase", this.ticketController.purchaseTicket);
+    this.route.get("/:id", this.ticketController.getTicket);
   }
 
   public getRouter(): Router {

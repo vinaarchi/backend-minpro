@@ -227,6 +227,18 @@ exports.Prisma.DiscountCouponScalarFieldEnum = {
   expirationDate: 'expirationDate'
 };
 
+exports.Prisma.TransactionScalarFieldEnum = {
+  id: 'id',
+  ticketId: 'ticketId',
+  userId: 'userId',
+  proofImage: 'proofImage',
+  status: 'status',
+  finalPrice: 'finalPrice',
+  promotionCode: 'promotionCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -260,7 +272,8 @@ exports.Prisma.ModelName = {
   Ticket: 'Ticket',
   Promotion: 'Promotion',
   PointBalance: 'PointBalance',
-  DiscountCoupon: 'DiscountCoupon'
+  DiscountCoupon: 'DiscountCoupon',
+  Transaction: 'Transaction'
 };
 
 /**
