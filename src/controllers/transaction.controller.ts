@@ -15,6 +15,20 @@ export class TransactionController {
         });
       }
 
+      //cek apakah tiket tersedia
+      const ticket = await prisma.ticket.findUnique({
+        where: { ticket_id: Number(ticketId) },
+      });
+
+      if (!ticket) {
+        return res.status(404).json({ error: "Ticket not found" });
+      }
+
+      if (ticket.available <= 0) {
+        return res.status(400).json({ error: "Ticket is sold out" });
+      }
+      //o
+
       let imageUrl = "";
       if (proofImage) {
         try {

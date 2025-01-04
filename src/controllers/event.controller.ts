@@ -83,7 +83,7 @@ export class EventsController {
       const events = await prisma.event.findMany({
         where: whereConditions,
         ...paginate(page, limit),
-        orderBy: { date: "asc" },
+        orderBy: { date: "desc" },
         include: {
           locationDetail: true,
           category: true,
@@ -430,5 +430,59 @@ export class EventsController {
       });
     }
   }
-}
 
+  //reviw
+  async getEventReviews(req: Request, res: Response): Promise<any> {
+    const eventId = parseInt(req.params.id);
+
+    try {
+      const reviews = await prisma.review.findMany({
+        where: { eventId },
+        include: {
+          user: {
+            select: {
+              username: true,
+              imgProfile: true,
+            },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+      });
+
+      res.json(reviews);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+      res.status(500).json({ error: "Failed to fetch reviews" });
+    }
+  }
+
+  async addReview(req: Request, res: Response): Promise<any> {
+    const eventId = parseInt(req.params.id);
+    const { rating, comment } = req.body;
+    const userId = 2;
+
+    try {
+      const newReview = await prisma.review.create({
+        data: {
+          eventId,
+          userId,
+          rating,
+          comment,
+        },
+        include: {
+          user: {
+            select: {
+              username: true,
+              imgProfile: true,
+            },
+          },
+        },
+      });
+
+      res.status(201).json(newReview);
+    } catch (error) {
+      console.error("Error adding review:", error);
+      res.status(500).json({ error: "Failed to add review" });
+    }
+  }
+}

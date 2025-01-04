@@ -1,11 +1,11 @@
 import { Router, Request, Response, NextFunction } from "express";
- import express from "express";
+import express from "express";
 import { EventsController } from "../controllers/event.controller";
 import { verifyToken } from "../middleware/verifyToken";
 
 export class EventRouter {
   private route: Router;
-   private eventController: EventsController;
+  private eventController: EventsController;
 
   constructor() {
     this.eventController = new EventsController();
@@ -20,10 +20,12 @@ export class EventRouter {
     this.route.delete("/:id", this.eventController.deleteEvent);
     this.route.get("/:eventId/tickets", this.eventController.getTicketsByEvent);
     this.route.post("/upload", this.eventController.uploadImage);
+
+    this.route.get("/:id/reviews", this.eventController.getEventReviews);
+    this.route.post("/:id/reviews", this.eventController.addReview);
   }
 
-
-public getRouter(): Router {
-  return this.route;
-   }
- }
+  public getRouter(): Router {
+    return this.route;
+  }
+}
