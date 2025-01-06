@@ -8,7 +8,7 @@ export class TransactionController {
     try {
       const { ticketId, userId, promoCode, finalPrice, proofImage } = req.body;
 
-      if (!ticketId || !userId || !finalPrice) {
+      if (!ticketId || !userId) {
         return res.status(400).json({
           error: "Missing required fields",
           details: "ticketId, userId, and finalPrice are required",
