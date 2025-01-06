@@ -17,7 +17,6 @@ export class EventRouter {
     this.route.get("/:id", this.eventController.getEventDetails);
     this.route.post("/", this.eventController.createEvent);
     this.route.patch("/:id", this.eventController.updateEvent);
-    this.route.delete("/:id", this.eventController.deleteEvent);
     this.route.get("/:eventId/tickets", this.eventController.getTicketsByEvent);
     this.route.post("/upload", this.eventController.uploadImage);
 
