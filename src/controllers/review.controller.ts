@@ -5,7 +5,7 @@ export class ReviewController {
   //add review
   async addReview(req: Request, res: Response): Promise<any> {
     const { eventId, userId, rating, comment } = req.body;
-
+    console.log("Received review data:", { eventId, userId, rating, comment });
     if (!eventId || !userId || !rating) {
       return res.status(400).json({ error: "Missing required fields" });
     }
@@ -32,10 +32,20 @@ export class ReviewController {
           .status(400)
           .json({ error: "User has already reviewed this event" });
       }
+      console.log("Creating review for user ID:", userId);
       const review = await prisma.review.create({
         data: { eventId, userId, rating, comment },
+        include: {
+          user: {
+            select: {
+              id: userId,
+              username: true,
+              imgProfile: true,
+            },
+          },
+        },
       });
-
+      console.log("Created review:", review);
       res.status(201).json(review);
     } catch (error) {
       console.error(error);
@@ -56,7 +66,7 @@ export class ReviewController {
         take: limit,
         orderBy: { createdAt: "desc" },
         include: {
-          user: { select: { fullname: true, email: true } },
+          user: { select: { id: true, fullname: true, email: true } },
         },
       });
 
