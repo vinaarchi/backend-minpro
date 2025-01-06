@@ -132,6 +132,7 @@ export class EventsController {
     }
   }
 
+  //create events
   async createEvent(req: Request, res: Response): Promise<any> {
     const {
       name,
@@ -187,7 +188,7 @@ export class EventsController {
           },
         });
       }
-
+      // const organiserId = parseInt(req.params.organiserId);
       const event = await prisma.event.create({
         data: {
           name,
@@ -195,7 +196,7 @@ export class EventsController {
           date: new Date(date),
           time: new Date(`${date}T${time}`),
           location,
-          organiserId,
+          organiserId: Number(organiserId),
           heldBy,
           categoryId: eventCategory.id,
           image,
@@ -296,6 +297,7 @@ export class EventsController {
   // }
 
   //update event
+
   async updateEvent(req: Request, res: Response): Promise<any> {
     const eventId = parseInt(req.params.id);
     const { name, description, price, date, time, location, image } = req.body;
