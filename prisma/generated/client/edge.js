@@ -257,7 +257,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\Asus\\Documents\\Modul03\\git-minpro\\backend-minpro\\prisma\\generated\\client",
+      "value": "D:\\Full Stack Web Development Purwadhika\\JCWD-0412\\03_Backend\\mini-pro\\backend-minpro\\prisma\\generated\\client",
       "fromEnvVar": null
     },
     "config": {
@@ -271,7 +271,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\Asus\\Documents\\Modul03\\git-minpro\\backend-minpro\\prisma\\schema.prisma",
+    "sourceFilePath": "D:\\Full Stack Web Development Purwadhika\\JCWD-0412\\03_Backend\\mini-pro\\backend-minpro\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

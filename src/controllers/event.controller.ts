@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { prisma } from "../config/prisma";
 import { Prisma } from "@prisma/client";
 import cloudinary from "../config/cloudinary2";
+import ResponseHandler from "../utils/ResponseHandler";
 //pagination
 const paginate = (page: number, limit: number) => ({
   skip: (page - 1) * limit,
@@ -486,6 +487,37 @@ export class EventsController {
     } catch (error) {
       console.error("Error adding review:", error);
       res.status(500).json({ error: "Failed to add review" });
+    }
+  }
+
+  async getTotalEvent(req: Request, res: Response): Promise<any> {
+    const userId = parseInt(req.params.id);
+
+    if (!userId) {
+      return ResponseHandler.error(res, "User ID is required", 404);
+    }
+
+    try {
+      const totalEvents = await prisma.event.count({
+        where: {
+          organiserId: userId,
+        },
+      });
+
+      return ResponseHandler.success(
+        res,
+        "Get Total Event Success",
+        200,
+        totalEvents
+      );
+    } catch (error: any) {
+      console.log(error);
+      return ResponseHandler.error(
+        res,
+        "Failed to Count the events",
+        error.rc || 500,
+        error
+      );
     }
   }
 }

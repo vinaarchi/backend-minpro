@@ -22,6 +22,7 @@ export class EventRouter {
 
     this.route.get("/:id/reviews", this.eventController.getEventReviews);
     this.route.post("/:id/reviews", this.eventController.addReview);
+    this.route.get("/total-events/:id", this.eventController.getTotalEvent);
   }
 
   public getRouter(): Router {
