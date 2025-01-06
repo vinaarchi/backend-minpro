@@ -195,7 +195,7 @@ export class EventsController {
           date: new Date(date),
           time: new Date(`${date}T${time}`),
           location,
-          organiserId,
+          organiserId ,
           heldBy,
           categoryId: eventCategory.id,
           image,

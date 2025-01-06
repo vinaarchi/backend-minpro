@@ -78,7 +78,7 @@ export class TransactionController {
 
       const transactions = await prisma.transaction.findMany({
         where: {
-          userId: 2,
+          userId: userId,
         },
         include: {
           ticket: {

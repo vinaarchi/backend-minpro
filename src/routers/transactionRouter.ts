@@ -13,10 +13,10 @@ export class TransactionRouter {
   }
 
   private initializeRoutes(): void {
-    this.route.get(
-      "/organizer/:organizerId/stats",
-      this.transactionController.getOrganizerEventStats
-    );
+    // this.route.get(
+    //   "/organizer/:organizerId/stats",
+    //   this.transactionController.getOrganizerEventStats
+    // );
 
     this.route.post("/", this.transactionController.createTransaction);
     this.route.get(
