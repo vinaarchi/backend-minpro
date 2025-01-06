@@ -144,6 +144,7 @@ export class EventsController {
       heldBy,
       category,
       image,
+      locationDetailId,
     } = req.body;
 
     try {
@@ -156,7 +157,8 @@ export class EventsController {
         !organiserId ||
         !heldBy ||
         !category?.topic ||
-        !category?.format
+        !category?.format ||
+        !locationDetailId
       ) {
         return res.status(400).json({
           error: "Missing required fields",
@@ -170,6 +172,7 @@ export class EventsController {
             heldBy,
             category,
             image,
+            locationDetailId,
           },
         });
       }
@@ -201,9 +204,11 @@ export class EventsController {
           heldBy,
           categoryId: eventCategory.id,
           image,
+          locationDetailId: Number(locationDetailId),
         },
         include: {
           category: true,
+          locationDetail: true,
         },
       });
 

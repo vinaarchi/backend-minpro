@@ -5297,27 +5297,27 @@ export namespace Prisma {
 
   export type LocationDetailMinAggregateOutputType = {
     id: number | null
-    country: string | null
-    state: string | null
+    province: string | null
     city: string | null
+    district: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
   export type LocationDetailMaxAggregateOutputType = {
     id: number | null
-    country: string | null
-    state: string | null
+    province: string | null
     city: string | null
+    district: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
   export type LocationDetailCountAggregateOutputType = {
     id: number
-    country: number
-    state: number
+    province: number
     city: number
+    district: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -5334,27 +5334,27 @@ export namespace Prisma {
 
   export type LocationDetailMinAggregateInputType = {
     id?: true
-    country?: true
-    state?: true
+    province?: true
     city?: true
+    district?: true
     createdAt?: true
     updatedAt?: true
   }
 
   export type LocationDetailMaxAggregateInputType = {
     id?: true
-    country?: true
-    state?: true
+    province?: true
     city?: true
+    district?: true
     createdAt?: true
     updatedAt?: true
   }
 
   export type LocationDetailCountAggregateInputType = {
     id?: true
-    country?: true
-    state?: true
+    province?: true
     city?: true
+    district?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -5448,9 +5448,9 @@ export namespace Prisma {
 
   export type LocationDetailGroupByOutputType = {
     id: number
-    country: string
-    state: string
+    province: string
     city: string
+    district: string
     createdAt: Date
     updatedAt: Date
     _count: LocationDetailCountAggregateOutputType | null
@@ -5476,9 +5476,9 @@ export namespace Prisma {
 
   export type LocationDetailSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    country?: boolean
-    state?: boolean
+    province?: boolean
     city?: boolean
+    district?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     events?: boolean | LocationDetail$eventsArgs<ExtArgs>
@@ -5487,18 +5487,18 @@ export namespace Prisma {
 
   export type LocationDetailSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    country?: boolean
-    state?: boolean
+    province?: boolean
     city?: boolean
+    district?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["locationDetail"]>
 
   export type LocationDetailSelectScalar = {
     id?: boolean
-    country?: boolean
-    state?: boolean
+    province?: boolean
     city?: boolean
+    district?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -5516,9 +5516,9 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      country: string
-      state: string
+      province: string
       city: string
+      district: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["locationDetail"]>
@@ -5916,9 +5916,9 @@ export namespace Prisma {
    */ 
   interface LocationDetailFieldRefs {
     readonly id: FieldRef<"LocationDetail", 'Int'>
-    readonly country: FieldRef<"LocationDetail", 'String'>
-    readonly state: FieldRef<"LocationDetail", 'String'>
+    readonly province: FieldRef<"LocationDetail", 'String'>
     readonly city: FieldRef<"LocationDetail", 'String'>
+    readonly district: FieldRef<"LocationDetail", 'String'>
     readonly createdAt: FieldRef<"LocationDetail", 'DateTime'>
     readonly updatedAt: FieldRef<"LocationDetail", 'DateTime'>
   }
@@ -12531,9 +12531,9 @@ export namespace Prisma {
 
   export const LocationDetailScalarFieldEnum: {
     id: 'id',
-    country: 'country',
-    state: 'state',
+    province: 'province',
     city: 'city',
+    district: 'district',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -13048,9 +13048,9 @@ export namespace Prisma {
     OR?: LocationDetailWhereInput[]
     NOT?: LocationDetailWhereInput | LocationDetailWhereInput[]
     id?: IntFilter<"LocationDetail"> | number
-    country?: StringFilter<"LocationDetail"> | string
-    state?: StringFilter<"LocationDetail"> | string
+    province?: StringFilter<"LocationDetail"> | string
     city?: StringFilter<"LocationDetail"> | string
+    district?: StringFilter<"LocationDetail"> | string
     createdAt?: DateTimeFilter<"LocationDetail"> | Date | string
     updatedAt?: DateTimeFilter<"LocationDetail"> | Date | string
     events?: EventListRelationFilter
@@ -13058,9 +13058,9 @@ export namespace Prisma {
 
   export type LocationDetailOrderByWithRelationInput = {
     id?: SortOrder
-    country?: SortOrder
-    state?: SortOrder
+    province?: SortOrder
     city?: SortOrder
+    district?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     events?: EventOrderByRelationAggregateInput
@@ -13071,9 +13071,9 @@ export namespace Prisma {
     AND?: LocationDetailWhereInput | LocationDetailWhereInput[]
     OR?: LocationDetailWhereInput[]
     NOT?: LocationDetailWhereInput | LocationDetailWhereInput[]
-    country?: StringFilter<"LocationDetail"> | string
-    state?: StringFilter<"LocationDetail"> | string
+    province?: StringFilter<"LocationDetail"> | string
     city?: StringFilter<"LocationDetail"> | string
+    district?: StringFilter<"LocationDetail"> | string
     createdAt?: DateTimeFilter<"LocationDetail"> | Date | string
     updatedAt?: DateTimeFilter<"LocationDetail"> | Date | string
     events?: EventListRelationFilter
@@ -13081,9 +13081,9 @@ export namespace Prisma {
 
   export type LocationDetailOrderByWithAggregationInput = {
     id?: SortOrder
-    country?: SortOrder
-    state?: SortOrder
+    province?: SortOrder
     city?: SortOrder
+    district?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: LocationDetailCountOrderByAggregateInput
@@ -13098,9 +13098,9 @@ export namespace Prisma {
     OR?: LocationDetailScalarWhereWithAggregatesInput[]
     NOT?: LocationDetailScalarWhereWithAggregatesInput | LocationDetailScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"LocationDetail"> | number
-    country?: StringWithAggregatesFilter<"LocationDetail"> | string
-    state?: StringWithAggregatesFilter<"LocationDetail"> | string
+    province?: StringWithAggregatesFilter<"LocationDetail"> | string
     city?: StringWithAggregatesFilter<"LocationDetail"> | string
+    district?: StringWithAggregatesFilter<"LocationDetail"> | string
     createdAt?: DateTimeWithAggregatesFilter<"LocationDetail"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"LocationDetail"> | Date | string
   }
@@ -13891,9 +13891,9 @@ export namespace Prisma {
   }
 
   export type LocationDetailCreateInput = {
-    country: string
-    state: string
+    province: string
     city: string
+    district: string
     createdAt?: Date | string
     updatedAt?: Date | string
     events?: EventCreateNestedManyWithoutLocationDetailInput
@@ -13901,18 +13901,18 @@ export namespace Prisma {
 
   export type LocationDetailUncheckedCreateInput = {
     id?: number
-    country: string
-    state: string
+    province: string
     city: string
+    district: string
     createdAt?: Date | string
     updatedAt?: Date | string
     events?: EventUncheckedCreateNestedManyWithoutLocationDetailInput
   }
 
   export type LocationDetailUpdateInput = {
-    country?: StringFieldUpdateOperationsInput | string
-    state?: StringFieldUpdateOperationsInput | string
+    province?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     events?: EventUpdateManyWithoutLocationDetailNestedInput
@@ -13920,9 +13920,9 @@ export namespace Prisma {
 
   export type LocationDetailUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    country?: StringFieldUpdateOperationsInput | string
-    state?: StringFieldUpdateOperationsInput | string
+    province?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     events?: EventUncheckedUpdateManyWithoutLocationDetailNestedInput
@@ -13930,26 +13930,26 @@ export namespace Prisma {
 
   export type LocationDetailCreateManyInput = {
     id?: number
-    country: string
-    state: string
+    province: string
     city: string
+    district: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type LocationDetailUpdateManyMutationInput = {
-    country?: StringFieldUpdateOperationsInput | string
-    state?: StringFieldUpdateOperationsInput | string
+    province?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type LocationDetailUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    country?: StringFieldUpdateOperationsInput | string
-    state?: StringFieldUpdateOperationsInput | string
+    province?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14873,9 +14873,9 @@ export namespace Prisma {
 
   export type LocationDetailCountOrderByAggregateInput = {
     id?: SortOrder
-    country?: SortOrder
-    state?: SortOrder
+    province?: SortOrder
     city?: SortOrder
+    district?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14886,18 +14886,18 @@ export namespace Prisma {
 
   export type LocationDetailMaxOrderByAggregateInput = {
     id?: SortOrder
-    country?: SortOrder
-    state?: SortOrder
+    province?: SortOrder
     city?: SortOrder
+    district?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type LocationDetailMinOrderByAggregateInput = {
     id?: SortOrder
-    country?: SortOrder
-    state?: SortOrder
+    province?: SortOrder
     city?: SortOrder
+    district?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16732,18 +16732,18 @@ export namespace Prisma {
   }
 
   export type LocationDetailCreateWithoutEventsInput = {
-    country: string
-    state: string
+    province: string
     city: string
+    district: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type LocationDetailUncheckedCreateWithoutEventsInput = {
     id?: number
-    country: string
-    state: string
+    province: string
     city: string
+    district: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16944,18 +16944,18 @@ export namespace Prisma {
   }
 
   export type LocationDetailUpdateWithoutEventsInput = {
-    country?: StringFieldUpdateOperationsInput | string
-    state?: StringFieldUpdateOperationsInput | string
+    province?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type LocationDetailUncheckedUpdateWithoutEventsInput = {
     id?: IntFieldUpdateOperationsInput | number
-    country?: StringFieldUpdateOperationsInput | string
-    state?: StringFieldUpdateOperationsInput | string
+    province?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
