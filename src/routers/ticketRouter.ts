@@ -18,6 +18,14 @@ export class TicketRouter {
     this.route.delete("/:id", this.ticketController.deleteTicket);
     this.route.post("/purchase", this.ticketController.purchaseTicket);
     this.route.get("/:id", this.ticketController.getTicket);
+    this.route.get(
+      "/total-ticket/organizer/:id",
+      this.ticketController.getTotalTicket
+    );
+    this.route.get(
+      "/total-customer/all-event/:id",
+      this.ticketController.getTotalCustomer
+    );
   }
 
   public getRouter(): Router {

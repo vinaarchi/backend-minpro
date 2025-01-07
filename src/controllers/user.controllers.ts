@@ -377,4 +377,47 @@ export class UserController {
       return ResponseHandler.error(res, "Reset Password Failed", 500, error);
     }
   }
+
+  async getDiskonKupon(req: Request, res: Response): Promise<any> {
+    const userId = req.params.id;
+    console.log(userId);
+
+    if (!userId) {
+      return ResponseHandler.error(res, "User ID is required", 404);
+    }
+
+    try {
+      const diskon = await prisma.discountCoupon.findMany({
+        where: {
+          userId: parseInt(userId),
+          expirationDate: {
+            gte: new Date(),
+          },
+        },
+      });
+
+      if (diskon.length === 0) {
+        return ResponseHandler.error(
+          res,
+          "No Active discount coupons found",
+          404
+        );
+      }
+
+      return ResponseHandler.success(
+        res,
+        "Get Discount Coupon Successfully",
+        200,
+        diskon
+      );
+    } catch (error: any) {
+      console.log(error);
+      return ResponseHandler.error(
+        res,
+        "Failed to Count the Events",
+        error.rc || 500,
+        error
+      );
+    }
+  }
 }

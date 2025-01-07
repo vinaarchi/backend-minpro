@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { prisma } from "../config/prisma";
 import cloudinary from "../config/cloudinary2";
 import multer from "multer";
+import ResponseHandler from "../utils/ResponseHandler";
 
 export class TransactionController {
   async createTransaction(req: Request, res: Response): Promise<any> {
@@ -228,6 +229,61 @@ export class TransactionController {
         error: "Failed to fetch organizer statistics",
         details: error instanceof Error ? error.message : "Unknown error",
       });
+    }
+  }
+
+  async getTotalTransaction(req: Request, res: Response): Promise<any> {
+    try {
+      // dapetin user id nya
+      const userId = parseInt(req.params.organiserId, 10);
+
+      // mencari semua event yang dibuat oleh 1 user
+      const events = await prisma.event.findMany({
+        where: { organiserId: userId },
+        include: {
+          tickets: {
+            include: {
+              transactions: {
+                select: {
+                  finalPrice: true,
+                  status: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (events.length === 0) {
+        return ResponseHandler.error(res, "No events found for this user", 400);
+      }
+
+      // ini ngitung total transaksi dari semua event yang ditemukan
+
+      let totalTransaction = 0;
+      events.forEach((event) => {
+        event.tickets.forEach((ticket) => {
+          ticket.transactions.forEach((transaction) => {
+            if (transaction.status === "SUCCESS") {
+              totalTransaction += transaction.finalPrice;
+            }
+          });
+        });
+      });
+
+      return ResponseHandler.success(
+        res,
+        "Success get all Total",
+        200,
+        totalTransaction
+      );
+    } catch (error: any) {
+      console.log(error);
+      return ResponseHandler.error(
+        res,
+        "Failed to fetch total transaction",
+        400
+      );
     }
   }
 }

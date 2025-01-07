@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { prisma } from "../config/prisma";
 import { isDiscountCouponValid } from "../services/discount.service";
+import ResponseHandler from "../utils/ResponseHandler";
 
 export class TicketController {
   async addTicket(req: Request, res: Response): Promise<any> {
@@ -304,6 +305,68 @@ export class TicketController {
     } catch (error) {
       console.error("Transaction error:", error);
       res.status(500).json({ error: "Failed to process transaction" });
+    }
+  }
+
+  async getTotalTicket(req: Request, res: Response): Promise<any> {
+    //buat dapetin siapa eo yang mau diliat
+    const userId = parseInt(req.params.id);
+
+    if (!userId) {
+      return ResponseHandler.error(res, "User ID is required", 404);
+    }
+
+    try {
+      const totalTickets = await prisma.ticket.count({
+        where: {
+          event: {
+            organiserId: userId,
+          },
+        },
+      });
+
+      return ResponseHandler.success(
+        res,
+        "Total tickets successfully count",
+        200,
+        totalTickets
+      );
+    } catch (error: any) {
+      console.log(error);
+      return ResponseHandler.error(
+        res,
+        "Failed to get total ticket count",
+        404
+      );
+    }
+  }
+
+  async getTotalCustomer(req: Request, res: Response): Promise<any> {
+    // buat dapetin siapa eo yang mau diliat
+    const userId = parseInt(req.params.id);
+
+    if (!userId) {
+      return ResponseHandler.error(res, "User ID is required", 400);
+    }
+
+    try {
+      const totalCustomers = await prisma.ticket.count({
+        where: {
+          event: {
+            organiserId: userId,
+          },
+        },
+      });
+
+      return ResponseHandler.success(
+        res,
+        "Total Customer Successfully Count",
+        200,
+        totalCustomers
+      );
+    } catch (error: any) {
+      console.log(error);
+      return ResponseHandler.error(res, "Failed to get total Customer", 404);
     }
   }
 }

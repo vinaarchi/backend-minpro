@@ -518,6 +518,7 @@ export class EventsController {
         error.rc || 500,
         error
       );
+      
     }
   }
 }
