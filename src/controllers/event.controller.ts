@@ -467,8 +467,9 @@ export class EventsController {
 
   async addReview(req: Request, res: Response): Promise<any> {
     const eventId = parseInt(req.params.id);
-    const { rating, comment } = req.body;
-    const userId = 2;
+
+    const { rating, comment, userId } = req.body;
+    // const userId = 2;
 
     try {
       const newReview = await prisma.review.create({
