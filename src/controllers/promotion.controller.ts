@@ -4,35 +4,23 @@ import { prisma } from "../config/prisma";
 export class PromotionController {
   //create promotion
   async addPromotion(req: Request, res: Response): Promise<any> {
-    const {
-      eventId,
-      type,
-      value,
-      promotionCode,
-      startDate,
-      expirationDate,
-      maxUse,
-    } = req.body;
-
-    if (
-      !eventId ||
-      !type ||
-      !value ||
-      !promotionCode ||
-      !startDate ||
-      !expirationDate ||
-      maxUse === undefined
-    ) {
-      return res.status(400).json({ error: "Missing required fields" });
-    }
-
     try {
-      const event = await prisma.event.findUnique({
-        where: { event_id: eventId },
+      const {
+        eventId,
+        type,
+        value,
+        promotionCode,
+        startDate,
+        expirationDate,
+        maxUse,
+      } = req.body;
+
+      const existingPromo = await prisma.promotion.findUnique({
+        where: { promotionCode },
       });
 
-      if (!event) {
-        return res.status(404).json({ error: "Event not found" });
+      if (existingPromo) {
+        return res.status(400).json({ error: "Promotion code already exists" });
       }
 
       const promotion = await prisma.promotion.create({
@@ -44,37 +32,14 @@ export class PromotionController {
           startDate: new Date(startDate),
           expirationDate: new Date(expirationDate),
           maxUse,
+          useCount: 0,
         },
       });
 
       res.status(201).json(promotion);
     } catch (error) {
-      console.error(error);
+      console.error("Error creating promotion:", error);
       res.status(500).json({ error: "Failed to create promotion" });
-    }
-  }
-
-  //get promotions for event
-  async getPromotionsForEvent(req: Request, res: Response): Promise<any> {
-    const eventId = parseInt(req.params.eventId);
-
-    try {
-      const event = await prisma.event.findUnique({
-        where: { event_id: eventId },
-      });
-
-      if (!event) {
-        return res.status(404).json({ error: "Event not found" });
-      }
-
-      const promotions = await prisma.promotion.findMany({
-        where: { eventId },
-      });
-
-      res.json(promotions);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Failed to fetch promotions" });
     }
   }
 
@@ -181,7 +146,7 @@ export class PromotionController {
       res.status(500).json({ error: "Failed to verify promotion" });
     }
   }
-  async checkPromoCode(req: Request, res: Response) {
+  async checkPromoCode(req: Request, res: Response): Promise<any> {
     try {
       const { code, ticketId } = req.body;
 
