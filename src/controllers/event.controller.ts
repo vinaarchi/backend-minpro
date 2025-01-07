@@ -455,6 +455,7 @@ export class EventsController {
     } catch (error) {
       console.error("Error fetching promotions:", error);
       res.status(500).json({ error: "Failed to fetch promotions" });
+
     }
   }
 }
