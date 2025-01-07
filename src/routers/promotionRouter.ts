@@ -13,8 +13,9 @@ export class PromotionRouter {
   }
 
   private initializeRoutes(): void {
+    this.route.post("/check", this.promotionController.checkPromoCode);
     this.route.post("/", this.promotionController.addPromotion);
-    this.route.get("/:eventId", this.promotionController.getPromotionsForEvent);
+
     this.route.patch("/:id", this.promotionController.updatePromotion);
     this.route.delete("/:id", this.promotionController.deletePromotion);
     this.route.post("/verify", this.promotionController.verifyPromotion);

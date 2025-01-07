@@ -219,92 +219,7 @@ export class EventsController {
       res.status(500).json({ error: "Failed to create event" });
     }
   }
-  // create evenr
-  // async createEvent(req: Request, res: Response): Promise<any> {
-  //   const { name, description, date, time, location, heldBy, category } =
-  //     req.body;
-
-  //   try {
-  //     const organiserId = req.user?.id;
-
-  //     if (!organiserId) {
-  //       return res.status(401).json({ error: "User not authenticated" });
-  //     }
-
-  //     if (
-  //       !name ||
-  //       !description ||
-  //       !date ||
-  //       !time ||
-  //       !location ||
-  //       !heldBy ||
-  //       !category?.topic ||
-  //       !category?.format
-  //     ) {
-  //       return res.status(400).json({
-  //         error: "Missing required fields",
-  //         received: {
-  //           name,
-  //           description,
-  //           date,
-  //           time,
-  //           location,
-  //           heldBy,
-  //           category,
-  //         },
-  //       });
-  //     }
-
-  //     const user = await prisma.user.findUnique({
-  //       where: { id: organiserId },
-  //     });
-
-  //     if (!user || user.role !== "ORGANIZER") {
-  //       return res
-  //         .status(403)
-  //         .json({ error: "User must be an organizer to create events" });
-  //     }
-
-  //     let eventCategory = await prisma.eventCategory.findFirst({
-  //       where: {
-  //         AND: [{ topic: category.topic }, { format: category.format }],
-  //       },
-  //     });
-
-  //     if (!eventCategory) {
-  //       eventCategory = await prisma.eventCategory.create({
-  //         data: {
-  //           topic: category.topic,
-  //           format: category.format,
-  //         },
-  //       });
-  //     }
-
-  //     const event = await prisma.event.create({
-  //       data: {
-  //         name,
-  //         description,
-  //         date: new Date(date),
-  //         time: new Date(`${date}T${time}`),
-  //         location,
-  //         organiserId,
-  //         heldBy,
-  //         categoryId: eventCategory.id,
-  //       },
-  //       include: {
-  //         category: true,
-  //         organiser: true,
-  //       },
-  //     });
-
-  //     res.status(201).json(event);
-  //   } catch (error) {
-  //     console.error("Error creating event:", error);
-  //   }
-  // }
-
   //update event
-
   async updateEvent(req: Request, res: Response): Promise<any> {
     const eventId = parseInt(req.params.id);
     const { name, description, price, date, time, location, image } = req.body;
@@ -523,6 +438,23 @@ export class EventsController {
         error.rc || 500,
         error
       );
+    }
+  }
+  async getPromotionsForEvent(req: Request, res: Response): Promise<any> {
+    const eventId = parseInt(req.params.eventId);
+
+    try {
+      const promotions = await prisma.promotion.findMany({
+        where: { eventId: eventId },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      res.json(promotions);
+    } catch (error) {
+      console.error("Error fetching promotions:", error);
+      res.status(500).json({ error: "Failed to fetch promotions" });
     }
   }
 }

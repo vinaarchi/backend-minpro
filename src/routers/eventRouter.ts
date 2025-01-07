@@ -15,6 +15,10 @@ export class EventRouter {
   private initializeRoutes(): void {
     this.route.get("/", this.eventController.getEvents);
     this.route.get("/:id", this.eventController.getEventDetails);
+    this.route.get(
+      "/:eventId/promotions",
+      this.eventController.getPromotionsForEvent
+    );
     this.route.post("/", this.eventController.createEvent);
     this.route.patch("/:id", this.eventController.updateEvent);
     this.route.get("/:eventId/tickets", this.eventController.getTicketsByEvent);
