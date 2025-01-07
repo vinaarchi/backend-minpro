@@ -160,9 +160,9 @@ exports.Prisma.EventCategoryScalarFieldEnum = {
 
 exports.Prisma.LocationDetailScalarFieldEnum = {
   id: 'id',
-  country: 'country',
-  state: 'state',
+  province: 'province',
   city: 'city',
+  district: 'district',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

@@ -67,9 +67,9 @@ model EventCategory {
 
 model LocationDetail {
   id        Int      @id @default(autoincrement())
-  country   String
-  state     String
+  province  String
   city      String
+  district  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   events    Event[]

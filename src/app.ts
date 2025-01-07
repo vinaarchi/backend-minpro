@@ -12,6 +12,7 @@ import { PromotionRouter } from "./routers/promotionRouter";
 import { EventCategoryRouter } from "./routers/eventCatRouter";
 import { LocationDetailRouter } from "./routers/locationDetailRouter";
 import { TransactionRouter } from "./routers/transactionRouter";
+import { LocationRouter } from "./routers/locationRouter";
 
 const PORT = process.env.PORT || 3232;
 
@@ -47,6 +48,7 @@ class App {
     const eventCategoryRouter = new EventCategoryRouter();
     const locationDetailRouter = new LocationDetailRouter();
     const transactionRouter = new TransactionRouter();
+    const locationRouter = new LocationRouter();
     this.app.get("/", (req: Request, res: Response): any => {
       return res.status(200).send("<h1>EVENT APPLICATION</h1>");
     });
@@ -56,8 +58,9 @@ class App {
     this.app.use("/tickets", ticketRouter.getRouter());
     this.app.use("/promotions", promotionRouter.getRouter());
     this.app.use("/event-categories", eventCategoryRouter.getRouter());
-    this.app.use("/location-details", locationDetailRouter.getRouter());
+    this.app.use("/locations", locationDetailRouter.getRouter());
     this.app.use("/transactions", transactionRouter.getRouter());
+    this.app.use("/location-details", locationRouter.getRouter());
   }
 
   private errorHandler(): void {
