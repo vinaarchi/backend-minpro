@@ -378,46 +378,46 @@ export class UserController {
     }
   }
 
-  async getDiskonKupon(req: Request, res: Response): Promise<any> {
-    const userId = req.params.id;
-    console.log(userId);
+  // async getDiskonKupon(req: Request, res: Response): Promise<any> {
+  //   const userId = req.params.id;
+  //   console.log(userId);
 
-    if (!userId) {
-      return ResponseHandler.error(res, "User ID is required", 404);
-    }
+  //   if (!userId) {
+  //     return ResponseHandler.error(res, "User ID is required", 404);
+  //   }
 
-    try {
-      const diskon = await prisma.discountCoupon.findMany({
-        where: {
-          userId: parseInt(userId),
-          expirationDate: {
-            gte: new Date(),
-          },
-        },
-      });
+  //   try {
+  //     const diskon = await prisma.discountCoupon.findMany({
+  //       where: {
+  //         userId: parseInt(userId),
+  //         expirationDate: {
+  //           gte: new Date(),
+  //         },
+  //       },
+  //     });
 
-      if (diskon.length === 0) {
-        return ResponseHandler.error(
-          res,
-          "No Active discount coupons found",
-          404
-        );
-      }
+  //     if (diskon.length === 0) {
+  //       return ResponseHandler.error(
+  //         res,
+  //         "No Active discount coupons found",
+  //         404
+  //       );
+  //     }
 
-      return ResponseHandler.success(
-        res,
-        "Get Discount Coupon Successfully",
-        200,
-        diskon
-      );
-    } catch (error: any) {
-      console.log(error);
-      return ResponseHandler.error(
-        res,
-        "Failed to Count the Events",
-        error.rc || 500,
-        error
-      );
-    }
-  }
+  //     return ResponseHandler.success(
+  //       res,
+  //       "Get Discount Coupon Successfully",
+  //       200,
+  //       diskon
+  //     );
+  //   } catch (error: any) {
+  //     console.log(error);
+  //     return ResponseHandler.error(
+  //       res,
+  //       "Failed to Count the Events",
+  //       error.rc || 500,
+  //       error
+  //     );
+  //   }
+  // }
 }
