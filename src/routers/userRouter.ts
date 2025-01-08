@@ -44,10 +44,10 @@ export class UserRouter {
       this.userController.resetPassword
     );
 
-    this.route.get(
-      "/:id/discount-coupon",
-      this.userController.getDiskonKupon
-    );
+    // this.route.get(
+    //   "/:id/discount-coupon",
+    //   this.userController.getDiskonKupon
+    // );
   }
 
   public getRouter(): Router {
