@@ -19,17 +19,31 @@ export const createDiscountCoupon = async (userId: number): Promise<void> => {
 };
 
 // cek apakah kode diskon valid
-export const isDiscountCouponValid = async (discountCode: string): Promise<boolean> => {
+export const isDiscountCouponValid = async (
+  discountCode: string,
+  userId: number
+): Promise<boolean> => {
   const coupon = await prisma.discountCoupon.findUnique({
     where: {
       code: discountCode,
+      userId: userId,
     },
-  })
-
-  if(!coupon) {
+  });
+   console.log(coupon)
+  if (!coupon) {
     return false; // kode diskon tidak ditemukan
   }
 
+  // memeriksa apakah kode diskon milik pengguna yang dimaksud
+  if (coupon.userId !== userId) {
+    return false; // kupon tidak milik pengguna ini
+  }
+
   const currentDate = new Date();
-  return coupon.expirationDate > currentDate; // kode diskon masih berlaku
-}
+  if (coupon.expirationDate <= currentDate) {
+    return false; // kode diskon sudah kadaluwarsa
+  }
+
+  //kalo semua pemeriksaannya valid
+  return true;
+};

@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { prisma } from "../config/prisma";
-import { isDiscountCouponValid } from "../services/discount.service";
 import ResponseHandler from "../utils/ResponseHandler";
 
 export class TicketController {
