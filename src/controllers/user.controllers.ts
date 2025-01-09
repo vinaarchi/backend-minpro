@@ -116,6 +116,7 @@ export class UserController {
         process.env.TOKEN_KEY || "test",
         { expiresIn: "1h" }
       );
+      console.log("ini cek data finduser", findUser);
 
       return res.status(200).send({
         id: findUser.id,

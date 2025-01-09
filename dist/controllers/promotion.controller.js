@@ -15,22 +15,13 @@ class PromotionController {
     //create promotion
     addPromotion(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { eventId, type, value, promotionCode, startDate, expirationDate, maxUse, } = req.body;
-            if (!eventId ||
-                !type ||
-                !value ||
-                !promotionCode ||
-                !startDate ||
-                !expirationDate ||
-                maxUse === undefined) {
-                return res.status(400).json({ error: "Missing required fields" });
-            }
             try {
-                const event = yield prisma_1.prisma.event.findUnique({
-                    where: { event_id: eventId },
+                const { eventId, type, value, promotionCode, startDate, expirationDate, maxUse, } = req.body;
+                const existingPromo = yield prisma_1.prisma.promotion.findUnique({
+                    where: { promotionCode },
                 });
-                if (!event) {
-                    return res.status(404).json({ error: "Event not found" });
+                if (existingPromo) {
+                    return res.status(400).json({ error: "Promotion code already exists" });
                 }
                 const promotion = yield prisma_1.prisma.promotion.create({
                     data: {
@@ -41,35 +32,14 @@ class PromotionController {
                         startDate: new Date(startDate),
                         expirationDate: new Date(expirationDate),
                         maxUse,
+                        useCount: 0,
                     },
                 });
                 res.status(201).json(promotion);
             }
             catch (error) {
-                console.error(error);
+                console.error("Error creating promotion:", error);
                 res.status(500).json({ error: "Failed to create promotion" });
-            }
-        });
-    }
-    //get promotions for event
-    getPromotionsForEvent(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const eventId = parseInt(req.params.eventId);
-            try {
-                const event = yield prisma_1.prisma.event.findUnique({
-                    where: { event_id: eventId },
-                });
-                if (!event) {
-                    return res.status(404).json({ error: "Event not found" });
-                }
-                const promotions = yield prisma_1.prisma.promotion.findMany({
-                    where: { eventId },
-                });
-                res.json(promotions);
-            }
-            catch (error) {
-                console.error(error);
-                res.status(500).json({ error: "Failed to fetch promotions" });
             }
         });
     }
@@ -118,6 +88,86 @@ class PromotionController {
             catch (error) {
                 console.error(error);
                 res.status(500).json({ error: "Failed to delete promotion" });
+            }
+        });
+    }
+    verifyPromotion(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { code, eventId } = req.body;
+                const promotion = yield prisma_1.prisma.promotion.findFirst({
+                    where: {
+                        promotionCode: code,
+                        eventId: parseInt(eventId),
+                        expirationDate: {
+                            gt: new Date(),
+                        },
+                        useCount: {
+                            lt: prisma_1.prisma.promotion.fields.maxUse,
+                        },
+                    },
+                });
+                if (!promotion) {
+                    return res.status(400).json({
+                        valid: false,
+                        message: "Invalid or expired promotion code",
+                    });
+                }
+                res.json({
+                    valid: true,
+                    promotionCode: promotion.promotionCode,
+                    value: promotion.value,
+                    type: promotion.type,
+                });
+            }
+            catch (error) {
+                console.error("Promotion verification error:", error);
+                res.status(500).json({ error: "Failed to verify promotion" });
+            }
+        });
+    }
+    checkPromoCode(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { code, ticketId } = req.body;
+                const promotion = yield prisma_1.prisma.promotion.findFirst({
+                    where: {
+                        promotionCode: code,
+                        event: {
+                            tickets: {
+                                some: {
+                                    ticket_id: parseInt(ticketId),
+                                },
+                            },
+                        },
+                    },
+                });
+                if (!promotion) {
+                    return res.status(404).json({ error: "Invalid promotion code" });
+                }
+                if (promotion.useCount >= promotion.maxUse) {
+                    return res.status(400).json({ error: "Promotion code has expired" });
+                }
+                const ticket = yield prisma_1.prisma.ticket.findUnique({
+                    where: { ticket_id: parseInt(ticketId) },
+                });
+                if (!ticket || ticket.price === null) {
+                    return res
+                        .status(404)
+                        .json({ error: "Ticket not found or invalid price" });
+                }
+                const discount = promotion.type === "PERCENTAGE"
+                    ? Math.floor((ticket.price * promotion.value) / 100)
+                    : promotion.value;
+                yield prisma_1.prisma.promotion.update({
+                    where: { promotion_id: promotion.promotion_id },
+                    data: { useCount: { increment: 1 } },
+                });
+                res.json({ discount });
+            }
+            catch (error) {
+                console.error("Promo code check failed:", error);
+                res.status(500).json({ error: "Failed to check promo code" });
             }
         });
     }

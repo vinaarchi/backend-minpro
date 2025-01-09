@@ -11,9 +11,13 @@ class TicketRouter {
     }
     initializeRoutes() {
         this.route.post("/", this.ticketController.addTicket);
-        this.route.get("/:eventId", this.ticketController.getTicketsForEvent);
+        // this.route.get("/:eventId", this.ticketController.getTicketsForEvent);
         this.route.patch("/:id", this.ticketController.updateTicket);
         this.route.delete("/:id", this.ticketController.deleteTicket);
+        this.route.post("/purchase", this.ticketController.purchaseTicket);
+        this.route.get("/:id", this.ticketController.getTicket);
+        this.route.get("/total-ticket/organizer/:id", this.ticketController.getTotalTicket);
+        this.route.get("/total-customer/all-event/:id", this.ticketController.getTotalCustomer);
     }
     getRouter() {
         return this.route;

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createDiscountCoupon = void 0;
+exports.isDiscountCouponValid = exports.createDiscountCoupon = void 0;
 const prisma_1 = require("../config/prisma");
 const generateReferralCode_1 = require("../utils/generateReferralCode");
 const createDiscountCoupon = (userId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -19,11 +19,35 @@ const createDiscountCoupon = (userId) => __awaiter(void 0, void 0, void 0, funct
     console.log(discountCode);
     yield prisma_1.prisma.discountCoupon.create({
         data: {
-            code: "discountCode",
-            discount: 10,
-            expirationDate: expirationDate,
-            userId: userId,
+            code: discountCode, // kode diskon
+            discount: 10, // diskon 10%
+            expirationDate: expirationDate, // tanggal kadaluarsa 3 bulan dari sekarang
+            userId: userId, // id user yang mendapatkan diskon
         },
     });
 });
 exports.createDiscountCoupon = createDiscountCoupon;
+// cek apakah kode diskon valid
+const isDiscountCouponValid = (discountCode, userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const coupon = yield prisma_1.prisma.discountCoupon.findUnique({
+        where: {
+            code: discountCode,
+            userId: userId,
+        },
+    });
+    console.log(coupon);
+    if (!coupon) {
+        return false; // kode diskon tidak ditemukan
+    }
+    // memeriksa apakah kode diskon milik pengguna yang dimaksud
+    if (coupon.userId !== userId) {
+        return false; // kupon tidak milik pengguna ini
+    }
+    const currentDate = new Date();
+    if (coupon.expirationDate <= currentDate) {
+        return false; // kode diskon sudah kadaluwarsa
+    }
+    //kalo semua pemeriksaannya valid
+    return true;
+});
+exports.isDiscountCouponValid = isDiscountCouponValid;

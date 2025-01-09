@@ -11,17 +11,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EventCategoryController = void 0;
 const prisma_1 = require("../config/prisma");
+const eventCategories_1 = require("../data/eventCategories");
 class EventCategoryController {
     //create a new event category
     createCategory(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, description } = req.body;
-            if (!name) {
-                return res.status(400).json({ error: "Name is required" });
-            }
+            const { topic, format } = req.body;
+            // if (!name) {
+            //   return res.status(400).json({ error: "Name is required" });
+            // }
             try {
                 const category = yield prisma_1.prisma.eventCategory.create({
-                    data: { name, description },
+                    data: { topic, format },
                 });
                 res.status(201).json(category);
             }
@@ -115,6 +116,61 @@ class EventCategoryController {
             catch (error) {
                 console.error(error);
                 res.status(500).json({ error: "Failed to delete event category" });
+            }
+        });
+    }
+    // //get topic
+    // async getAllTopics(req: Request, res: Response): Promise<any> {
+    //   try {
+    //     const topics = await prisma.eventCategory.findMany({
+    //       select: {
+    //         topic: true,
+    //       },
+    //       distinct: ["topic"],
+    //     });
+    //     //map to get array
+    //     const uniqueTopics = topics.map((category) => category.topic);
+    //     res.status(200).json(uniqueTopics); //return the list of topics
+    //   } catch (error) {
+    //     console.error(error);
+    //     res.status(500).json({ error: "Failed to fetch topics" });
+    //   }
+    // }
+    // //get all formats
+    // async getAllFormats(req: Request, res: Response): Promise<any> {
+    //   try {
+    //     const formats = await prisma.eventCategory.findMany({
+    //       select: {
+    //         format: true,
+    //       },
+    //       distinct: ["format"],
+    //     });
+    //     const uniqueFormats = formats.map((category) => category.format);
+    //     res.status(200).json(uniqueFormats);
+    //   } catch (error) {
+    //     console.error(error);
+    //     res.status(500).json({ error: "Failed to fetch format" });
+    //   }
+    // }
+    getAllTopics(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                res.status(200).json(eventCategories_1.eventTopics);
+            }
+            catch (err) {
+                console.error(err);
+                res.status(500).json({ error: "Failed to fetch topics" });
+            }
+        });
+    }
+    getAllFormats(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                res.status(200).json(eventCategories_1.eventFormats);
+            }
+            catch (err) {
+                console.error(err);
+                res.status(500).json({ error: "Failed to fetch formats" });
             }
         });
     }

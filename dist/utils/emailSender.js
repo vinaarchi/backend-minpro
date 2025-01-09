@@ -24,7 +24,7 @@ const sendEmail = (email, subject, templateFile, data) => __awaiter(void 0, void
         const compileTemplate = handlebars_1.default.compile(templateSource);
         const html = compileTemplate(data);
         yield nodemailer_1.transporter.sendMail({
-            from: process.env.MAL_SENDER,
+            from: process.env.MAIL_SENDER,
             to: email,
             subject,
             html,

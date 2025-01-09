@@ -16,6 +16,7 @@ class ReviewController {
     addReview(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { eventId, userId, rating, comment } = req.body;
+            console.log("Received review data:", { eventId, userId, rating, comment });
             if (!eventId || !userId || !rating) {
                 return res.status(400).json({ error: "Missing required fields" });
             }
@@ -38,9 +39,20 @@ class ReviewController {
                         .status(400)
                         .json({ error: "User has already reviewed this event" });
                 }
+                console.log("Creating review for user ID:", userId);
                 const review = yield prisma_1.prisma.review.create({
                     data: { eventId, userId, rating, comment },
+                    include: {
+                        user: {
+                            select: {
+                                id: userId,
+                                username: true,
+                                imgProfile: true,
+                            },
+                        },
+                    },
                 });
+                console.log("Created review:", review);
                 res.status(201).json(review);
             }
             catch (error) {
@@ -62,7 +74,7 @@ class ReviewController {
                     take: limit,
                     orderBy: { createdAt: "desc" },
                     include: {
-                        user: { select: { fullname: true, email: true } },
+                        user: { select: { id: true, fullname: true, email: true } },
                     },
                 });
                 const totalReviews = yield prisma_1.prisma.review.count({ where: { eventId } });

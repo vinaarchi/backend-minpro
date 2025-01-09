@@ -1,4 +1,6 @@
 "use strict";
+// import { Request, Response } from "express";
+// import { prisma } from "../config/prisma";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,104 +10,46 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LocationDetailController = void 0;
-const prisma_1 = require("../config/prisma");
+const axios_1 = __importDefault(require("axios"));
 class LocationDetailController {
-    //create a location detail
-    addLocationDetail(req, res) {
+    getProvince(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { country, state, city } = req.body;
-            if (!country || !state || !city) {
-                return res.status(400).json({ error: "Missing required fields" });
-            }
             try {
-                const locationDetail = yield prisma_1.prisma.locationDetail.create({
-                    data: { country, state, city },
-                });
-                res.status(201).json(locationDetail);
+                const response = yield axios_1.default.get("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json");
+                const javaEast = response.data.find((p) => p.id === "35");
+                res.json(javaEast);
             }
             catch (error) {
-                console.error(error);
-                res.status(500).json({ error: "Failed to add location detail" });
+                res.status(500).json({ error: "Failed to fetch province data" });
             }
         });
     }
-    //get a location detail by id
-    getLocationDetailById(req, res) {
+    getCities(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const locationDetailId = parseInt(req.params.id);
             try {
-                const locationDetail = yield prisma_1.prisma.locationDetail.findUnique({
-                    where: { id: locationDetailId },
-                });
-                if (!locationDetail) {
-                    return res.status(404).json({ error: "Location detail not found" });
-                }
-                res.json(locationDetail);
+                const response = yield axios_1.default.get("https://www.emsifa.com/api-wilayah-indonesia/api/regencies/35.json");
+                const filteredCities = response.data.filter((city) => parseInt(city.id) >= 3571 && parseInt(city.id) <= 3579);
+                res.json(filteredCities);
             }
             catch (error) {
-                console.error(error);
-                res.status(500).json({ error: "Failed to fetch location detail" });
+                res.status(500).json({ error: "Failed to fetch cities data" });
             }
         });
     }
-    //get all location details
-    getAllLocationDetails(req, res) {
+    getDistricts(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { cityId } = req.params;
             try {
-                const locationDetails = yield prisma_1.prisma.locationDetail.findMany();
-                res.json(locationDetails);
+                const response = yield axios_1.default.get(`https://www.emsifa.com/api-wilayah-indonesia/api/districts/${cityId}.json`);
+                res.json(response.data);
             }
             catch (error) {
-                console.error(error);
-                res.status(500).json({ error: "Failed to fetch location details" });
-            }
-        });
-    }
-    //update location detail
-    updateLocationDetail(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const locationDetailId = parseInt(req.params.id);
-            const { country, state, city } = req.body;
-            try {
-                const locationDetail = yield prisma_1.prisma.locationDetail.findUnique({
-                    where: { id: locationDetailId },
-                });
-                if (!locationDetail) {
-                    return res.status(404).json({ error: "Location detail not found" });
-                }
-                const updatedLocationDetail = yield prisma_1.prisma.locationDetail.update({
-                    where: { id: locationDetailId },
-                    data: Object.assign(Object.assign(Object.assign({}, (country && { country })), (state && { state })), (city && { city })),
-                });
-                res.json(updatedLocationDetail);
-            }
-            catch (error) {
-                console.error(error);
-                res.status(500).json({ error: "Failed to update location detail" });
-            }
-        });
-    }
-    //delete location detail
-    deleteLocationDetail(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const locationDetailId = parseInt(req.params.id);
-            try {
-                const locationDetail = yield prisma_1.prisma.locationDetail.findUnique({
-                    where: { id: locationDetailId },
-                });
-                if (!locationDetail) {
-                    return res.status(404).json({ error: "Location detail not found" });
-                }
-                yield prisma_1.prisma.locationDetail.delete({
-                    where: { id: locationDetailId },
-                });
-                res.json({ message: "Location detail deleted successfully" });
-            }
-            catch (error) {
-                console.error(error);
-                res.status(500).json({ error: "Failed to delete location detail" });
+                res.status(500).json({ error: "Failed to fetch districts data" });
             }
         });
     }
