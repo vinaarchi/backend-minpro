@@ -43,11 +43,10 @@ export class UserRouter {
       verifyToken,
       this.userController.resetPassword
     );
-
-    // this.route.get(
-    //   "/:id/discount-coupon",
-    //   this.userController.getDiskonKupon
-    // );
+    this.route.get(
+      "/:userId/discount-coupon",
+      this.userController.getUserDiscountCoupons
+    );
   }
 
   public getRouter(): Router {

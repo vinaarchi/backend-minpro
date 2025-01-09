@@ -146,6 +146,7 @@ export class PromotionController {
       res.status(500).json({ error: "Failed to verify promotion" });
     }
   }
+  
   async checkPromoCode(req: Request, res: Response): Promise<any> {
     try {
       const { code, ticketId } = req.body;

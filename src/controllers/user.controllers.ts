@@ -1,4 +1,4 @@
-import { NextFunction, Request, response, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { prisma } from "../config/prisma";
 import ResponseHandler from "../utils/ResponseHandler";
 import { hashPassword } from "../utils/hashPassword";
@@ -7,8 +7,6 @@ import { sendEmail } from "../utils/emailSender";
 import { compareSync } from "bcrypt";
 import { generateReferralCode } from "../utils/generateReferralCode";
 import { addReferralPoints } from "../services/point.service";
-import { transporter } from "../config/nodemailer";
-import { register } from "node:module";
 import { cloudinaryUpload } from "../config/cloudinary";
 import { createDiscountCoupon } from "../services/discount.service";
 
@@ -378,46 +376,26 @@ export class UserController {
     }
   }
 
-  // async getDiskonKupon(req: Request, res: Response): Promise<any> {
-  //   const userId = req.params.id;
-  //   console.log(userId);
+  async getUserDiscountCoupons(req: Request, res: Response): Promise<any> {
+    const userId = parseInt(req.params.userId);
 
-  //   if (!userId) {
-  //     return ResponseHandler.error(res, "User ID is required", 404);
-  //   }
+    try {
+      const discountCoupons = await prisma.discountCoupon.findMany({
+        where: {
+          userId: userId,
+          expirationDate: { gte: new Date() }, // hanya yang belum expired aja
+        },
+      });
 
-  //   try {
-  //     const diskon = await prisma.discountCoupon.findMany({
-  //       where: {
-  //         userId: parseInt(userId),
-  //         expirationDate: {
-  //           gte: new Date(),
-  //         },
-  //       },
-  //     });
-
-  //     if (diskon.length === 0) {
-  //       return ResponseHandler.error(
-  //         res,
-  //         "No Active discount coupons found",
-  //         404
-  //       );
-  //     }
-
-  //     return ResponseHandler.success(
-  //       res,
-  //       "Get Discount Coupon Successfully",
-  //       200,
-  //       diskon
-  //     );
-  //   } catch (error: any) {
-  //     console.log(error);
-  //     return ResponseHandler.error(
-  //       res,
-  //       "Failed to Count the Events",
-  //       error.rc || 500,
-  //       error
-  //     );
-  //   }
-  // }
+      return ResponseHandler.success(
+        res,
+        "Successfully Get Coupon",
+        200,
+        discountCoupons
+      );
+    } catch (error) {
+      console.log(error);
+      return ResponseHandler.error(res, "Failed To Fetch Data", 400);
+    }
+  }
 }

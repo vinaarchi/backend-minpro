@@ -13,6 +13,7 @@ import { EventCategoryRouter } from "./routers/eventCatRouter";
 import { LocationDetailRouter } from "./routers/locationDetailRouter";
 import { TransactionRouter } from "./routers/transactionRouter";
 import { LocationRouter } from "./routers/locationRouter";
+// import { DiscountRouter } from "./routers/discountRouter";
 
 const PORT = process.env.PORT || 3232;
 
@@ -49,6 +50,7 @@ class App {
     const locationDetailRouter = new LocationDetailRouter();
     const transactionRouter = new TransactionRouter();
     const locationRouter = new LocationRouter();
+    // const discountRouter = new DiscountRouter();
     this.app.get("/", (req: Request, res: Response): any => {
       return res.status(200).send("<h1>EVENT APPLICATION</h1>");
     });
@@ -61,6 +63,7 @@ class App {
     this.app.use("/locations", locationDetailRouter.getRouter());
     this.app.use("/transactions", transactionRouter.getRouter());
     this.app.use("/location-details", locationRouter.getRouter());
+    // this.app.use("/discount", discountRouter.getRouter());
   }
 
   private errorHandler(): void {
