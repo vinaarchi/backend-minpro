@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response, Router } from "express";
+import { Router } from "express";
 import { UserController } from "../controllers/user.controllers";
 import { regisValidation } from "../middleware/validator";
 import { verifyToken } from "../middleware/verifyToken";
@@ -28,7 +28,7 @@ export class UserRouter {
       verifyToken,
       this.userController.updateProfile
     );
-    this.route.delete("/delete/:id", this.userController.deleteUser);
+    // this.route.delete("/delete/:id", this.userController.deleteUser);
 
     this.route.patch(
       "/photo-profile",
@@ -47,6 +47,8 @@ export class UserRouter {
       "/:userId/discount-coupon",
       this.userController.getUserDiscountCoupons
     );
+
+    this.route.get("/:userId/total-points", this.userController.getTotalPoints);
   }
 
   public getRouter(): Router {
