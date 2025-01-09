@@ -19,11 +19,12 @@ class UserRouter {
         this.route.patch("/verify-account", verifyToken_1.verifyToken, this.userController.verifyUser);
         this.route.get("/data-user/:id", this.userController.getUserById);
         this.route.patch("/update/:id", verifyToken_1.verifyToken, this.userController.updateProfile);
-        this.route.delete("/delete/:id", this.userController.deleteUser);
+        // this.route.delete("/delete/:id", this.userController.deleteUser);
         this.route.patch("/photo-profile", verifyToken_1.verifyToken, (0, uploader_1.uploaderMemory)().single("imgProfile"), this.userController.updatePhotoProfile);
         this.route.post("/forgot-password", this.userController.forgotPassword);
         this.route.patch("/reset-password", verifyToken_1.verifyToken, this.userController.resetPassword);
         this.route.get("/:userId/discount-coupon", this.userController.getUserDiscountCoupons);
+        this.route.get("/:userId/total-points", this.userController.getTotalPoints);
     }
     getRouter() {
         return this.route;

@@ -187,27 +187,29 @@ class UserController {
             }
         });
     }
-    deleteUser(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const userId = parseInt(req.params.id);
-                const user = yield prisma_1.prisma.user.findUnique({
-                    where: { id: userId },
-                });
-                if (!user) {
-                    return ResponseHandler_1.default.error(res, "User not Found", 404);
-                }
-                yield prisma_1.prisma.user.delete({
-                    where: { id: userId },
-                });
-                return ResponseHandler_1.default.success(res, "User deleted successfully", 200);
-            }
-            catch (error) {
-                console.log(error);
-                return ResponseHandler_1.default.error(res, "Failed to delete user", error.rc || 500, error);
-            }
-        });
-    }
+    // async deleteUser(req: Request, res: Response): Promise<any> {
+    //   try {
+    //     const userId = parseInt(req.params.id);
+    //     const user = await prisma.user.findUnique({
+    //       where: { id: userId },
+    //     });
+    //     if (!user) {
+    //       return ResponseHandler.error(res, "User not Found", 404);
+    //     }
+    //     await prisma.user.delete({
+    //       where: { id: userId },
+    //     });
+    //     return ResponseHandler.success(res, "User deleted successfully", 200);
+    //   } catch (error: any) {
+    //     console.log(error);
+    //     return ResponseHandler.error(
+    //       res,
+    //       "Failed to delete user",
+    //       error.rc || 500,
+    //       error
+    //     );
+    //   }
+    // }
     verifyUser(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -300,6 +302,25 @@ class UserController {
             catch (error) {
                 console.log(error);
                 return ResponseHandler_1.default.error(res, "Failed To Fetch Data", 400);
+            }
+        });
+    }
+    getTotalPoints(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userId = parseInt(req.params.userId);
+            try {
+                const point = yield prisma_1.prisma.pointBalance.findMany({
+                    where: {
+                        userId: userId,
+                    },
+                });
+                const totalPoints = point.reduce((sum, point) => sum + point.points, 0);
+                console.log("ini total pointsnya", totalPoints);
+                return ResponseHandler_1.default.success(res, "Success get Points", 200, totalPoints);
+            }
+            catch (error) {
+                console.log(error);
+                return ResponseHandler_1.default.error(res, "Failed to Get Total Point", 400);
             }
         });
     }
